@@ -14,8 +14,6 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        bool randomizeMap = true;
-        bool randomizeWeapons;
         Random rand;
         Randomizer randomizer;
         string folderPath;
@@ -26,26 +24,28 @@ namespace WindowsFormsApp1
 
             rand = new Random();
             randomizer = new Randomizer();
-            randomizer.Init();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             folderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop;
             folderBrowserDialog1.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
-            richTextBox1.Text = folderBrowserDialog1.SelectedPath;
-            folderPath = richTextBox1.Text;
+            PathTextBox.Text = folderBrowserDialog1.SelectedPath;
+            folderPath = PathTextBox.Text;
+            WeaponComboBox.Text = "Fully Random";
+            randomizer.randomizeLevels = checkBox1.Checked;
+            randomizer.randomizeWeapons = checkBox2.Checked;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if(checkBox1.Checked)
             {
-                randomizeMap = true;
+                randomizer.randomizeLevels = true;
             }
             else
             {
-                randomizeMap = false;
+                randomizer.randomizeLevels = false;
             }
         }
 
@@ -53,23 +53,30 @@ namespace WindowsFormsApp1
         {
             if (checkBox2.Checked)
             {
-                randomizeWeapons = true;
+                randomizer.randomizeWeapons = true;
+                WeaponComboBox.Enabled = true;
             }
             else
             {
-                randomizeWeapons = false;
+                randomizer.randomizeWeapons = false;
+                WeaponComboBox.Enabled = false;
             }
         }
 
         private void Randomize_Click(object sender, EventArgs e)
         {
-            if (randomizeMap == false && randomizeWeapons == false)
+            if (randomizer.randomizeLevels == false && randomizer.randomizeWeapons == false)
                 return;
 
             randomizer.BackupFiles(folderPath);
 
-            if(randomizeMap)
+            if (randomizer.randomizeLevels)
                 randomizer.RandomizeLevelOrder(rand, folderPath);
+
+            if (randomizer.randomizeWeapons)
+                randomizer.RandomizeWeapons(rand, folderPath);
+
+            randomizer.EditLevelScripts(folderPath);
         }
 
         private void Unrandomize_Click(object sender, EventArgs e)
@@ -81,14 +88,26 @@ namespace WindowsFormsApp1
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-                richTextBox1.Text = folderBrowserDialog1.SelectedPath;
-                folderPath = richTextBox1.Text;
+                PathTextBox.Text = folderBrowserDialog1.SelectedPath;
+                folderPath = PathTextBox.Text;
             }
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void PathTextBox_TextChanged(object sender, EventArgs e)
         {
-            folderPath = richTextBox1.Text;
+            folderPath = PathTextBox.Text;
+        }
+
+        private void WeaponComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(WeaponComboBox.Text.Equals("Fully Randomized"))
+            {
+                randomizer.weaponRandomizationType = WeaponRandomization.FullyRandom;
+            }
+            else if (WeaponComboBox.Text.Equals("Weapons & Abilities Split"))
+            {
+                randomizer.weaponRandomizationType = WeaponRandomization.WeaponAbilitySplit;
+            }
         }
     }
 }
