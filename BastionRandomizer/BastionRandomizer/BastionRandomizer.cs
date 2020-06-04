@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        int seed;
         Random rand;
         Randomizer randomizer;
         string folderPath;
@@ -21,8 +22,7 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
-
-            rand = new Random();
+            
             randomizer = new Randomizer();
         }
 
@@ -68,6 +68,11 @@ namespace WindowsFormsApp1
             if (randomizer.randomizeLevels == false && randomizer.randomizeWeapons == false)
                 return;
 
+            if (SeedTextBox.Text == "")
+                rand = new Random();
+            else
+                rand = new Random(seed);
+
             randomizer.BackupFiles(folderPath);
 
             if (randomizer.randomizeLevels)
@@ -100,14 +105,28 @@ namespace WindowsFormsApp1
 
         private void WeaponComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(WeaponComboBox.Text.Equals("Fully Randomized"))
+            if(WeaponComboBox.Text == "Fully Randomized")
             {
                 randomizer.weaponRandomizationType = WeaponRandomization.FullyRandom;
             }
-            else if (WeaponComboBox.Text.Equals("Weapons & Abilities Split"))
+            else if (WeaponComboBox.Text == "Weapons & Abilities Split")
             {
                 randomizer.weaponRandomizationType = WeaponRandomization.WeaponAbilitySplit;
             }
+        }
+
+        private void SeedTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void SeedTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (SeedTextBox.Text != "")
+                seed = int.Parse(SeedTextBox.Text);
         }
     }
 }
