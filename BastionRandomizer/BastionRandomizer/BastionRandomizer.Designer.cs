@@ -36,6 +36,8 @@
             this.FolderSelect = new System.Windows.Forms.Button();
             this.PathTextBox = new System.Windows.Forms.RichTextBox();
             this.WeaponComboBox = new System.Windows.Forms.ComboBox();
+            this.SeedTextBox = new System.Windows.Forms.TextBox();
+            this.SeedLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // checkBox1
@@ -53,7 +55,7 @@
             // 
             // Randomize
             // 
-            this.Randomize.Location = new System.Drawing.Point(12, 58);
+            this.Randomize.Location = new System.Drawing.Point(12, 149);
             this.Randomize.Name = "Randomize";
             this.Randomize.Size = new System.Drawing.Size(91, 23);
             this.Randomize.TabIndex = 1;
@@ -76,7 +78,7 @@
             // 
             // Unrandomize
             // 
-            this.Unrandomize.Location = new System.Drawing.Point(116, 58);
+            this.Unrandomize.Location = new System.Drawing.Point(116, 149);
             this.Unrandomize.Name = "Unrandomize";
             this.Unrandomize.Size = new System.Drawing.Size(91, 23);
             this.Unrandomize.TabIndex = 3;
@@ -86,7 +88,7 @@
             // 
             // FolderSelect
             // 
-            this.FolderSelect.Location = new System.Drawing.Point(12, 87);
+            this.FolderSelect.Location = new System.Drawing.Point(12, 178);
             this.FolderSelect.Name = "FolderSelect";
             this.FolderSelect.Size = new System.Drawing.Size(91, 23);
             this.FolderSelect.TabIndex = 4;
@@ -96,7 +98,7 @@
             // 
             // PathTextBox
             // 
-            this.PathTextBox.Location = new System.Drawing.Point(116, 87);
+            this.PathTextBox.Location = new System.Drawing.Point(116, 178);
             this.PathTextBox.Multiline = false;
             this.PathTextBox.Name = "PathTextBox";
             this.PathTextBox.Size = new System.Drawing.Size(190, 23);
@@ -117,11 +119,32 @@
             this.WeaponComboBox.TabIndex = 7;
             this.WeaponComboBox.SelectedIndexChanged += new System.EventHandler(this.WeaponComboBox_SelectedIndexChanged);
             // 
+            // SeedTextBox
+            // 
+            this.SeedTextBox.Location = new System.Drawing.Point(47, 72);
+            this.SeedTextBox.MaxLength = 9;
+            this.SeedTextBox.Name = "SeedTextBox";
+            this.SeedTextBox.Size = new System.Drawing.Size(93, 20);
+            this.SeedTextBox.TabIndex = 8;
+            this.SeedTextBox.TextChanged += new System.EventHandler(this.SeedTextBox_TextChanged);
+            this.SeedTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SeedTextBox_KeyPress);
+            // 
+            // SeedLabel
+            // 
+            this.SeedLabel.AutoSize = true;
+            this.SeedLabel.Location = new System.Drawing.Point(9, 75);
+            this.SeedLabel.Name = "SeedLabel";
+            this.SeedLabel.Size = new System.Drawing.Size(32, 13);
+            this.SeedLabel.TabIndex = 9;
+            this.SeedLabel.Text = "Seed";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 121);
+            this.ClientSize = new System.Drawing.Size(334, 213);
+            this.Controls.Add(this.SeedLabel);
+            this.Controls.Add(this.SeedTextBox);
             this.Controls.Add(this.WeaponComboBox);
             this.Controls.Add(this.PathTextBox);
             this.Controls.Add(this.FolderSelect);
@@ -147,6 +170,8 @@
         private System.Windows.Forms.Button FolderSelect;
         private System.Windows.Forms.RichTextBox PathTextBox;
         private System.Windows.Forms.ComboBox WeaponComboBox;
+        private System.Windows.Forms.TextBox SeedTextBox;
+        private System.Windows.Forms.Label SeedLabel;
     }
 }
 
