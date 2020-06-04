@@ -1,5 +1,5 @@
 # BastionRandomizer
-This is a Randomizer for SuperGiant's Bastion.
+This is a Randomizer for Supergiant Games' Bastion.
 
 ## Settings
 
