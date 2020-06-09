@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class Form1
+    partial class BastionRandomizer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.RandomizeLevelOrder = new System.Windows.Forms.CheckBox();
             this.Randomize = new System.Windows.Forms.Button();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.RandomizeWeapons = new System.Windows.Forms.CheckBox();
             this.Unrandomize = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.FolderSelect = new System.Windows.Forms.Button();
@@ -38,20 +38,21 @@
             this.WeaponComboBox = new System.Windows.Forms.ComboBox();
             this.SeedTextBox = new System.Windows.Forms.TextBox();
             this.SeedLabel = new System.Windows.Forms.Label();
+            this.RemoveCutscenes = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // checkBox1
+            // RandomizeLevelOrder
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(12, 12);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(137, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "Randomize Level Order";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.RandomizeLevelOrder.AutoSize = true;
+            this.RandomizeLevelOrder.Checked = true;
+            this.RandomizeLevelOrder.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RandomizeLevelOrder.Location = new System.Drawing.Point(12, 12);
+            this.RandomizeLevelOrder.Name = "RandomizeLevelOrder";
+            this.RandomizeLevelOrder.Size = new System.Drawing.Size(137, 17);
+            this.RandomizeLevelOrder.TabIndex = 0;
+            this.RandomizeLevelOrder.Text = "Randomize Level Order";
+            this.RandomizeLevelOrder.UseVisualStyleBackColor = true;
+            this.RandomizeLevelOrder.CheckedChanged += new System.EventHandler(this.RandomizeLevelOrder_CheckedChanged);
             // 
             // Randomize
             // 
@@ -63,18 +64,18 @@
             this.Randomize.UseVisualStyleBackColor = true;
             this.Randomize.Click += new System.EventHandler(this.Randomize_Click);
             // 
-            // checkBox2
+            // RandomizeWeapons
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(12, 35);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(128, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Randomize Weapons";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.RandomizeWeapons.AutoSize = true;
+            this.RandomizeWeapons.Checked = true;
+            this.RandomizeWeapons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RandomizeWeapons.Location = new System.Drawing.Point(12, 35);
+            this.RandomizeWeapons.Name = "RandomizeWeapons";
+            this.RandomizeWeapons.Size = new System.Drawing.Size(128, 17);
+            this.RandomizeWeapons.TabIndex = 2;
+            this.RandomizeWeapons.Text = "Randomize Weapons";
+            this.RandomizeWeapons.UseVisualStyleBackColor = true;
+            this.RandomizeWeapons.CheckedChanged += new System.EventHandler(this.RandomizeWeapons_CheckedChanged);
             // 
             // Unrandomize
             // 
@@ -121,7 +122,7 @@
             // 
             // SeedTextBox
             // 
-            this.SeedTextBox.Location = new System.Drawing.Point(47, 72);
+            this.SeedTextBox.Location = new System.Drawing.Point(47, 98);
             this.SeedTextBox.MaxLength = 9;
             this.SeedTextBox.Name = "SeedTextBox";
             this.SeedTextBox.Size = new System.Drawing.Size(93, 20);
@@ -132,29 +133,41 @@
             // SeedLabel
             // 
             this.SeedLabel.AutoSize = true;
-            this.SeedLabel.Location = new System.Drawing.Point(9, 75);
+            this.SeedLabel.Location = new System.Drawing.Point(9, 101);
             this.SeedLabel.Name = "SeedLabel";
             this.SeedLabel.Size = new System.Drawing.Size(32, 13);
             this.SeedLabel.TabIndex = 9;
             this.SeedLabel.Text = "Seed";
             // 
-            // Form1
+            // RemoveCutscenes
+            // 
+            this.RemoveCutscenes.AutoSize = true;
+            this.RemoveCutscenes.Location = new System.Drawing.Point(12, 58);
+            this.RemoveCutscenes.Name = "RemoveCutscenes";
+            this.RemoveCutscenes.Size = new System.Drawing.Size(119, 17);
+            this.RemoveCutscenes.TabIndex = 10;
+            this.RemoveCutscenes.Text = "Remove Cutscenes";
+            this.RemoveCutscenes.UseVisualStyleBackColor = true;
+            this.RemoveCutscenes.CheckedChanged += new System.EventHandler(this.RemoveCutscenes_CheckedChanged);
+            // 
+            // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 213);
+            this.Controls.Add(this.RemoveCutscenes);
             this.Controls.Add(this.SeedLabel);
             this.Controls.Add(this.SeedTextBox);
             this.Controls.Add(this.WeaponComboBox);
             this.Controls.Add(this.PathTextBox);
             this.Controls.Add(this.FolderSelect);
             this.Controls.Add(this.Unrandomize);
-            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.RandomizeWeapons);
             this.Controls.Add(this.Randomize);
-            this.Controls.Add(this.checkBox1);
-            this.Name = "Form1";
+            this.Controls.Add(this.RandomizeLevelOrder);
+            this.Name = "BastionRandomizer";
             this.Text = "Bastion Randomizer";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.BastionRandomizer_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,9 +175,9 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox RandomizeLevelOrder;
         private System.Windows.Forms.Button Randomize;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox RandomizeWeapons;
         private System.Windows.Forms.Button Unrandomize;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button FolderSelect;
@@ -172,6 +185,7 @@
         private System.Windows.Forms.ComboBox WeaponComboBox;
         private System.Windows.Forms.TextBox SeedTextBox;
         private System.Windows.Forms.Label SeedLabel;
+        private System.Windows.Forms.CheckBox RemoveCutscenes;
     }
 }
 

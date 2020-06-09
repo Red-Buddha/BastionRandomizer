@@ -18,6 +18,7 @@ namespace WindowsFormsApp1
 
         public bool randomizeLevels;
         public bool randomizeWeapons;
+        public bool noCutscenes;
         public WeaponRandomization weaponRandomizationType = WeaponRandomization.FullyRandom;
 
 
@@ -364,21 +365,32 @@ namespace WindowsFormsApp1
             //WriteScript(path, Maps[2]);
 
             // Bastion
-            ReadScript(path, Maps[3]);
-            if (randomizeLevels)
+            if (randomizeLevels || noCutscenes)
             {
-                SetLevelOrder();
-                UnlockBastion();
+                ReadScript(path, Maps[3]);
+                if (randomizeLevels)
+                {
+                    SetLevelOrder();
+                    UnlockBastion();
+                }
+                if (noCutscenes)
+                {
+                    RemoveBastionCutscenes();
+                }
+                WriteScript(path, Maps[3]);
             }
-            WriteScript(path, Maps[3]);
 
             // Workmen Ward
             //ReadScript(path, Maps[4]);
             //WriteScript(path, Maps[4]);
 
             // Sundown Path
-            //ReadScript(path, Maps[5]);
-            //WriteScript(path, Maps[5]);
+            if (noCutscenes)
+            {
+                ReadScript(path, Maps[5]);
+                RemoveSundownCutscene();
+                WriteScript(path, Maps[5]);
+            }
 
             // Melting Pot
             //ReadScript(path, Maps[6]);
@@ -397,12 +409,12 @@ namespace WindowsFormsApp1
             //WriteScript(path, Maps[9]);
 
             // Langston
-            ReadScript(path, Maps[10]);
             if (randomizeLevels)
             {
+                ReadScript(path, Maps[10]);
                 UncoupleLangston();
+                WriteScript(path, Maps[10]);
             }
-            WriteScript(path, Maps[10]);
 
             // Prosper Bluff
             //ReadScript(path, Maps[11]);
@@ -417,8 +429,12 @@ namespace WindowsFormsApp1
             //WriteScript(path, Maps[13]);
 
             // Jawson Dream
-            //ReadScript(path, Maps[14]);
-            //WriteScript(path, Maps[14]);
+            if (noCutscenes)
+            {
+                ReadScript(path, Maps[14]);
+                RemoveDreamCutscene();
+                WriteScript(path, Maps[14]);
+            }
 
             // Roathus Lagoon
             //ReadScript(path, Maps[15]);
@@ -489,10 +505,7 @@ namespace WindowsFormsApp1
             // clearing out original unlocks
             for (int j = 0; j < 53; ++j)
                 scripts[3543 + j] = "\r\n";
-
-
-            //scripts[3543] = "OnLoad SetFlagTrue MAPS_UNLOCKED " + levelInfos[randomLevelOrder[0]]._name + " ; RequiredFlag = FlagGlobalCompleteProtoIntro01b; SaveStatus = true\r\n";
-
+            
             // adding randomized level order
             for (int i = 0; i < randomLevelOrder.Length - 1; ++i)
             {
@@ -501,12 +514,25 @@ namespace WindowsFormsApp1
 
             scripts[3544 + randomLevelOrder.Length - 1] = "OnLoad SetFlagTrue MAPS_UNLOCKED FinalArena01 ; RequiredFlag = FlagGlobalComplete" + levelInfos[randomLevelOrder[randomLevelOrder.Length - 1]]._name + " ; SaveStatus = true\r\n";
         }
+
+        private void RemoveBastionCutscenes()
+        {
+            scripts[50] = "\r\n";
+            scripts[51] = "\r\n";
+            scripts[52] = "\r\n";
+            scripts[53] = "\r\n";
+            scripts[54] = "\r\n";
+        }
         #endregion
 
         #region Workmen Ward
         #endregion
 
         #region Sundown Path
+        private void RemoveSundownCutscene()
+        {
+            scripts[605] = "OnFlagTrue SetupEndingPan LoadMap ProtoTown03 ; DelaySeconds = 1.5\r\n";
+        }
         #endregion
 
         #region Melting Pot
@@ -538,6 +564,10 @@ namespace WindowsFormsApp1
         #endregion
 
         #region Jawson Dream
+        private void RemoveDreamCutscene()
+        {
+            scripts[765] = "\tLoadMap ProtoTown03 ; DelaySeconds = 3.1\r\n";
+        }
         #endregion
 
         #region Roathus Lagoon
