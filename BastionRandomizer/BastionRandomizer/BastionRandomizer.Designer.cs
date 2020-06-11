@@ -39,6 +39,7 @@
             this.SeedTextBox = new System.Windows.Forms.TextBox();
             this.SeedLabel = new System.Windows.Forms.Label();
             this.RemoveCutscenes = new System.Windows.Forms.CheckBox();
+            this.RemoveHub = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // RandomizeLevelOrder
@@ -122,7 +123,7 @@
             // 
             // SeedTextBox
             // 
-            this.SeedTextBox.Location = new System.Drawing.Point(47, 98);
+            this.SeedTextBox.Location = new System.Drawing.Point(47, 113);
             this.SeedTextBox.MaxLength = 9;
             this.SeedTextBox.Name = "SeedTextBox";
             this.SeedTextBox.Size = new System.Drawing.Size(93, 20);
@@ -133,7 +134,7 @@
             // SeedLabel
             // 
             this.SeedLabel.AutoSize = true;
-            this.SeedLabel.Location = new System.Drawing.Point(9, 101);
+            this.SeedLabel.Location = new System.Drawing.Point(9, 116);
             this.SeedLabel.Name = "SeedLabel";
             this.SeedLabel.Size = new System.Drawing.Size(32, 13);
             this.SeedLabel.TabIndex = 9;
@@ -150,11 +151,23 @@
             this.RemoveCutscenes.UseVisualStyleBackColor = true;
             this.RemoveCutscenes.CheckedChanged += new System.EventHandler(this.RemoveCutscenes_CheckedChanged);
             // 
+            // RemoveHub
+            // 
+            this.RemoveHub.AutoSize = true;
+            this.RemoveHub.Location = new System.Drawing.Point(12, 81);
+            this.RemoveHub.Name = "RemoveHub";
+            this.RemoveHub.Size = new System.Drawing.Size(118, 17);
+            this.RemoveHub.TabIndex = 11;
+            this.RemoveHub.Text = "Remove Hub Level";
+            this.RemoveHub.UseVisualStyleBackColor = true;
+            this.RemoveHub.CheckedChanged += new System.EventHandler(this.RemoveHub_CheckedChanged);
+            // 
             // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 213);
+            this.Controls.Add(this.RemoveHub);
             this.Controls.Add(this.RemoveCutscenes);
             this.Controls.Add(this.SeedLabel);
             this.Controls.Add(this.SeedTextBox);
@@ -186,6 +199,7 @@
         private System.Windows.Forms.TextBox SeedTextBox;
         private System.Windows.Forms.Label SeedLabel;
         private System.Windows.Forms.CheckBox RemoveCutscenes;
+        private System.Windows.Forms.CheckBox RemoveHub;
     }
 }
 

@@ -32,23 +32,68 @@ namespace WindowsFormsApp1
             folderBrowserDialog1.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
             PathTextBox.Text = folderBrowserDialog1.SelectedPath;
             folderPath = PathTextBox.Text;
+
             WeaponComboBox.Text = "Fully Random";
+            
             randomizer.randomizeLevels = RandomizeLevelOrder.Checked;
             randomizer.randomizeWeapons = RandomizeWeapons.Checked;
             randomizer.noCutscenes = RemoveCutscenes.Checked;
+            randomizer.noHub = RemoveHub.Checked;
         }
 
+        // Levels
         private void RandomizeLevelOrder_CheckedChanged(object sender, EventArgs e)
         {
             randomizer.randomizeLevels = RandomizeLevelOrder.Checked;
         }
 
+        // Weapons
         private void RandomizeWeapons_CheckedChanged(object sender, EventArgs e)
         {
             randomizer.randomizeWeapons = RandomizeWeapons.Checked;
             WeaponComboBox.Enabled = RandomizeWeapons.Checked;
         }
 
+        private void WeaponComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(WeaponComboBox.Text == "Fully Randomized")
+            {
+                randomizer.weaponRandomizationType = WeaponRandomization.FullyRandom;
+            }
+            else if (WeaponComboBox.Text == "Weapons & Abilities Split")
+            {
+                randomizer.weaponRandomizationType = WeaponRandomization.WeaponAbilitySplit;
+            }
+        }
+
+        // Cutscenes
+        private void RemoveCutscenes_CheckedChanged(object sender, EventArgs e)
+        {
+            randomizer.noCutscenes = RemoveCutscenes.Checked;
+        }
+
+        // No Hub
+        private void RemoveHub_CheckedChanged(object sender, EventArgs e)
+        {
+            randomizer.noHub = RemoveHub.Checked;
+        }
+
+        // Set Seed
+        private void SeedTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (SeedTextBox.Text != "")
+                seed = int.Parse(SeedTextBox.Text);
+        }
+
+        private void SeedTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        // Randomize
         private void Randomize_Click(object sender, EventArgs e)
         {
             if (randomizer.randomizeLevels == false && randomizer.randomizeWeapons == false)
@@ -70,11 +115,13 @@ namespace WindowsFormsApp1
             randomizer.EditLevelScripts(folderPath);
         }
 
+        // Unrandomize
         private void Unrandomize_Click(object sender, EventArgs e)
         {
             randomizer.RestoreFiles(folderPath);
         }
 
+        // Game Data Folder
         private void FolderSelect_Click(object sender, EventArgs e)
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
@@ -89,35 +136,5 @@ namespace WindowsFormsApp1
             folderPath = PathTextBox.Text;
         }
 
-        private void WeaponComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(WeaponComboBox.Text == "Fully Randomized")
-            {
-                randomizer.weaponRandomizationType = WeaponRandomization.FullyRandom;
-            }
-            else if (WeaponComboBox.Text == "Weapons & Abilities Split")
-            {
-                randomizer.weaponRandomizationType = WeaponRandomization.WeaponAbilitySplit;
-            }
-        }
-
-        private void SeedTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void SeedTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (SeedTextBox.Text != "")
-                seed = int.Parse(SeedTextBox.Text);
-        }
-
-        private void RemoveCutscenes_CheckedChanged(object sender, EventArgs e)
-        {
-            randomizer.noCutscenes = RemoveCutscenes.Checked;
-        }
     }
 }
