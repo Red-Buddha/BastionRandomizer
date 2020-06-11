@@ -18,6 +18,8 @@ namespace WindowsFormsApp1
 
         public bool randomizeLevels;
         public bool randomizeWeapons;
+        public bool noCutscenes;
+        public bool noHub;
         public WeaponRandomization weaponRandomizationType = WeaponRandomization.FullyRandom;
 
 
@@ -143,7 +145,7 @@ namespace WindowsFormsApp1
 
 
 
-        public int[] Shuffle(Random rand, int[] array)
+        private int[] Shuffle(Random rand, int[] array)
         {
             int[] randomOrder = new int[array.Length];
             array.CopyTo(randomOrder, 0);
@@ -168,7 +170,7 @@ namespace WindowsFormsApp1
         // Randomize the order of all levels except for challenges, wharf district, the bastion
         public void RandomizeLevelOrder(Random rand, string path)
         {
-            // create array for all levels and for levels that will be randomized
+            // create array all levels and for levels that will be randomized
             int[] newOrder = Enumerable.Range(0, 32).ToArray();
             int[] tempOrder = new int[17] { 2, 4, 5, 8, 9, 10, 14, 15, 16, 17, 18, 21, 23, 25, 27, 28, 29 };
 
@@ -182,7 +184,7 @@ namespace WindowsFormsApp1
             SetMapValues(newOrder, path);
         }
 
-        void SetMapValues(int[] order, string path)
+        private void SetMapValues(int[] order, string path)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(path + "/Content/Game/MapLayouts.original.xml");
@@ -232,7 +234,7 @@ namespace WindowsFormsApp1
             SetWeaponValues(newOrder, path);
         }
 
-        public void SetWeaponValues( int[] order, string path)
+        private void SetWeaponValues( int[] order, string path)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(path + "/Content/Game/Loot/WeaponKits.original.xml");
@@ -360,97 +362,191 @@ namespace WindowsFormsApp1
             //WriteScript(path, Maps[1]);
 
             // Wharf District
-            //ReadScript(path, Maps[2]);
-            //WriteScript(path, Maps[2]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[2]);
+                WharfSkipHub();
+                WriteScript(path, Maps[2]);
+            }
 
             // Bastion
-            ReadScript(path, Maps[3]);
-            if (randomizeLevels)
+            if (randomizeLevels || noCutscenes)
             {
-                SetLevelOrder();
-                UnlockBastion();
+                ReadScript(path, Maps[3]);
+                if (randomizeLevels)
+                {
+                    SetLevelOrder();
+                    UnlockBastion();
+                }
+                if (noCutscenes)
+                {
+                    RemoveBastionCutscenes();
+                }
+                WriteScript(path, Maps[3]);
             }
-            WriteScript(path, Maps[3]);
 
             // Workmen Ward
-            //ReadScript(path, Maps[4]);
-            //WriteScript(path, Maps[4]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[4]);
+                WorkmenSkipHub(2);
+                WriteScript(path, Maps[4]);
+            }
 
             // Sundown Path
-            //ReadScript(path, Maps[5]);
-            //WriteScript(path, Maps[5]);
+            if (noCutscenes || noHub)
+            {
+                ReadScript(path, Maps[5]);
+                if (noCutscenes)
+                {
+                    RemoveSundownCutscene();
+                }
+                if (noHub)
+                {
+                    SundownSkipHub(5);
+                }
+                WriteScript(path, Maps[5]);
+            }
 
             // Melting Pot
-            //ReadScript(path, Maps[6]);
-            //WriteScript(path, Maps[6]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[6]);
+                MeltingSkipHub(4);
+                WriteScript(path, Maps[6]);
+            }
 
             // Hanging Gardens
-            //ReadScript(path, Maps[7]);
-            //WriteScript(path, Maps[7]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[7]);
+                GardensSkipHub(8);
+                WriteScript(path, Maps[7]);
+            }
 
             // Cinderbrick Fort
-            //ReadScript(path, Maps[8]);
-            //WriteScript(path, Maps[8]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[8]);
+                CinderbrickSkipHub(9);
+                WriteScript(path, Maps[8]);
+            }
 
             // Pyth Orchard
-            //ReadScript(path, Maps[9]);
-            //WriteScript(path, Maps[9]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[9]);
+                PythSkipHub(10);
+                WriteScript(path, Maps[9]);
+            }
 
             // Langston
-            ReadScript(path, Maps[10]);
-            if (randomizeLevels)
+            if (randomizeLevels || noHub)
             {
-                UncoupleLangston();
+                ReadScript(path, Maps[10]);
+                if (randomizeLevels)
+                {
+                    UncoupleLangston();
+                }
+                if(noHub)
+                {
+                    LangstonSkipHub(14);
+                }
+                WriteScript(path, Maps[10]);
             }
-            WriteScript(path, Maps[10]);
 
             // Prosper Bluff
-            //ReadScript(path, Maps[11]);
-            //WriteScript(path, Maps[11]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[11]);
+                ProsperSkipHub(15);
+                WriteScript(path, Maps[11]);
+            }
 
             // Wild Outskirts
-            //ReadScript(path, Maps[12]);
-            //WriteScript(path, Maps[12]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[12]);
+                OutskirtsSkipHub(16);
+                WriteScript(path, Maps[12]);
+            }
 
             // Jawson Bog
-            //ReadScript(path, Maps[13]);
-            //WriteScript(path, Maps[13]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[13]);
+                JawsonSkipHub(17);
+                WriteScript(path, Maps[13]);
+            }
 
             // Jawson Dream
-            //ReadScript(path, Maps[14]);
-            //WriteScript(path, Maps[14]);
+            if (noCutscenes)
+            {
+                ReadScript(path, Maps[14]);
+                RemoveDreamCutscene();
+                WriteScript(path, Maps[14]);
+            }
 
             // Roathus Lagoon
-            //ReadScript(path, Maps[15]);
-            //WriteScript(path, Maps[15]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[15]);
+                RoathusSkipHub(18);
+                WriteScript(path, Maps[15]);
+            }
 
             // Point Lemaign
-            //ReadScript(path, Maps[16]);
-            //WriteScript(path, Maps[16]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[16]);
+                LemaignSkipHub(21);
+                WriteScript(path, Maps[16]);
+            }
 
             // Colford Cauldron
-            //ReadScript(path, Maps[17]);
-            //WriteScript(path, Maps[17]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[17]);
+                ColfordSkipHub(23);
+                WriteScript(path, Maps[17]);
+            }
 
             // Mount Zand
-            //ReadScript(path, Maps[18]);
-            //WriteScript(path, Maps[18]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[18]);
+                ZandSkipHub(25);
+                WriteScript(path, Maps[18]);
+            }
 
             // Burstone Quarry
-            //ReadScript(path, Maps[19]);
-            //WriteScript(path, Maps[19]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[19]);
+                // Invasion skip makes skipping hub not possible so its removed from the mode for now
+                BurstoneSkipHub(27);
+                WriteScript(path, Maps[19]);
+            }
 
             // Ura Invasion
             //ReadScript(path, Maps[20]);
             //WriteScript(path, Maps[20]);
 
             // Urzendra Gate
-            //ReadScript(path, Maps[21]);
-            //WriteScript(path, Maps[21]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[21]);
+                UrzendraSkipHub(28);
+                WriteScript(path, Maps[21]);
+            }
 
             // Zulten's Hollow
-            //ReadScript(path, Maps[22]);
-            //WriteScript(path, Maps[22]);
+            if (noHub)
+            {
+                ReadScript(path, Maps[22]);
+                ZultenSkipHub(29);
+                WriteScript(path, Maps[22]);
+            }
 
             // Tazal 1
             //ReadScript(path, Maps[23]);
@@ -472,6 +568,11 @@ namespace WindowsFormsApp1
         #region Level Functions
 
         #region Wharf District
+        private void WharfSkipHub()
+        {
+            scripts[18] = "OnFlagTrue HeFell LoadMap " + levelInfos[randomLevelOrder[0]]._name + " ; DelaySeconds = 1.25\r\n";
+            scripts[965] = "OnUsed 964 LoadMap " + levelInfos[randomLevelOrder[0]]._name + "\r\n";
+        }
         #endregion
 
         #region Bastion
@@ -489,10 +590,7 @@ namespace WindowsFormsApp1
             // clearing out original unlocks
             for (int j = 0; j < 53; ++j)
                 scripts[3543 + j] = "\r\n";
-
-
-            //scripts[3543] = "OnLoad SetFlagTrue MAPS_UNLOCKED " + levelInfos[randomLevelOrder[0]]._name + " ; RequiredFlag = FlagGlobalCompleteProtoIntro01b; SaveStatus = true\r\n";
-
+            
             // adding randomized level order
             for (int i = 0; i < randomLevelOrder.Length - 1; ++i)
             {
@@ -501,24 +599,155 @@ namespace WindowsFormsApp1
 
             scripts[3544 + randomLevelOrder.Length - 1] = "OnLoad SetFlagTrue MAPS_UNLOCKED FinalArena01 ; RequiredFlag = FlagGlobalComplete" + levelInfos[randomLevelOrder[randomLevelOrder.Length - 1]]._name + " ; SaveStatus = true\r\n";
         }
+
+        private void RemoveBastionCutscenes()
+        {
+            scripts[50] = "\r\n";
+            scripts[51] = "\r\n";
+            scripts[52] = "\r\n";
+            scripts[53] = "\r\n";
+            scripts[54] = "\r\n";
+        }
         #endregion
 
         #region Workmen Ward
+        private void WorkmenSkipHub(int index)
+        {
+            for(int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if(randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[591] = "OnUsed 9066 LoadMap " + levelname + "\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Sundown Path
+        private void RemoveSundownCutscene()
+        {
+            scripts[605] = "OnFlagTrue SetupEndingPan LoadMap ProtoTown03 ; DelaySeconds = 1.5\r\n";
+        }
+
+        private void SundownSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    if (noCutscenes)
+                        scripts[605] = "OnFlagTrue SetupEndingPan LoadMap " + levelname + " ; DelaySeconds = 1.5\r\n";
+                    else
+                        scripts[619] = "OnFlagTrue CommenceEndingPan LoadMap " + levelname + " ; DelaySeconds = 13.5\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Melting Pot
+        private void MeltingSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[587] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.5\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Hanging Gardens
+        private void GardensSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[513] = "OnFlagTrue SmashCut LoadMap " + levelname + " ; DelaySeconds = 0.5\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Cinderbrick Fort
+        private void CinderbrickSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[821] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Pyth Orchard
+        private void PythSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[421] = "OnUsed VarSkyway LoadMap " + levelname + "\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Langston
@@ -526,42 +755,257 @@ namespace WindowsFormsApp1
         {
             scripts[1213] = "\tLoadMap ProtoTown03 ; DelaySeconds = 2.0 ;\r\n";
         }
+
+        private void LangstonSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[1213] = "\tLoadMap " + levelname + " ; DelaySeconds = 2.0 ;\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Prosper Bluff
+        private void ProsperSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[510] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.35 ;\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Wild Outskirts
+        private void OutskirtsSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[854] = "\tLoadMap " + levelname + " ; DelaySeconds = 10.5\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Jawson Bog
+        private void JawsonSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[487] = "\tLoadMap " + levelname + " ; DelaySeconds = 7.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Jawson Dream
+        private void RemoveDreamCutscene()
+        {
+            scripts[765] = "\tLoadMap Scenes02 ; DelaySeconds = 3.1\r\n";
+            scripts[766] = "\tSetGlobalFlagTrue FlagGlobalCompleteScenes01 ;";
+        }
         #endregion
 
         #region Roathus Lagoon
+        private void RoathusSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[959] = "\tLoadMap " + levelname + " ; DelaySeconds = 3.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Point Lemaign
+        private void LemaignSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[711] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Colford Cauldron
+        private void ColfordSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[552] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.5\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Mount Zand
+        private void ZandSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[489] = "\tLoadMap " + levelname + " ; DelaySeconds = 5.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Burstone Quarry
+        private void BurstoneSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[770] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Ura Invasion
         #endregion
 
         #region Urzendra Gate
+        private void UrzendraSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[974] = "\tLoadMap " + levelname + " ; DelaySeconds = 7.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Zulten's Hollow
+        private void ZultenSkipHub(int index)
+        {
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
+            {
+                if (randomLevelOrder[i] == index)
+                {
+                    string levelname;
+
+                    if (i == randomLevelOrder.Length - 1)
+                        levelname = "FinalArena01";
+                    else
+                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+
+                    scripts[941] = "\tLoadMap " + levelname + " ; DelaySeconds = 9.0\r\n";
+
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Tazal
