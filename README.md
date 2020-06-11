@@ -8,6 +8,10 @@ This is a Randomizer for Supergiant Games' Bastion.
 * Randomize Weapons 
   * `Fully Random` randomizes the pool of weapons and weapon abilities  
   * `Weapons & Abilities Split` randomizes the pool of weapons and the pool of weapon abilities separately
+* Remove Cutscence
+  * Removes the cutscenes from the Bastion , Sundown Path, and Jawson Dream
+* Remove Hub Level
+  * Beating a level immediately sends you to the next level skipping returning to the hub until after Tazal Terminals
 * Seed
   * Used for creating a specific randomized version of the game, leave blank for a random seed
   
