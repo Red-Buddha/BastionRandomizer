@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using BastionRandomizer.Properties;
 
 namespace WindowsFormsApp1
 {
@@ -29,7 +30,16 @@ namespace WindowsFormsApp1
         private void BastionRandomizer_Load(object sender, EventArgs e)
         {
             folderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop;
-            folderBrowserDialog1.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
+
+            if (Settings.Default.SavedFolder == null)
+            {
+                folderBrowserDialog1.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
+            }
+            else
+            {
+                folderBrowserDialog1.SelectedPath = Settings.Default.SavedFolder;
+            }
+
             PathTextBox.Text = folderBrowserDialog1.SelectedPath;
             folderPath = PathTextBox.Text;
 
@@ -126,6 +136,7 @@ namespace WindowsFormsApp1
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
+                Settings.Default.SavedFolder = folderBrowserDialog1.SelectedPath;
                 PathTextBox.Text = folderBrowserDialog1.SelectedPath;
                 folderPath = PathTextBox.Text;
             }

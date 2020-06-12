@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Configuration;
+
 namespace BastionRandomizer.Properties
 {
 
@@ -24,6 +26,17 @@ namespace BastionRandomizer.Properties
             get
             {
                 return defaultInstance;
+            }
+        }
+
+        [UserScopedSetting]
+        public string SavedFolder
+        {
+            get { return (string)this["SavedFolder"]; }
+            set
+            {
+                this["SavedFolder"] = value;
+                Save();
             }
         }
     }
