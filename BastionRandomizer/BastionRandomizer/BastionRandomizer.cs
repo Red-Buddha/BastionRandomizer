@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
-using BastionRandomizer.Properties;
+using BastionRandomiztion.Properties;
 
-namespace WindowsFormsApp1
+namespace BastionRandomiztion
 {
     public partial class BastionRandomizer : Form
     {
@@ -42,11 +42,9 @@ namespace WindowsFormsApp1
 
             PathTextBox.Text = folderBrowserDialog1.SelectedPath;
             folderPath = PathTextBox.Text;
-
-            WeaponComboBox.Text = "Fully Random";
             
             randomizer.randomizeLevels = RandomizeLevelOrder.Checked;
-            randomizer.randomizeWeapons = RandomizeWeapons.Checked;
+            randomizer.randomizeLoot = RandomizeLoot.Checked;
             randomizer.noCutscenes = RemoveCutscenes.Checked;
             randomizer.noHub = RemoveHub.Checked;
         }
@@ -57,22 +55,30 @@ namespace WindowsFormsApp1
             randomizer.randomizeLevels = RandomizeLevelOrder.Checked;
         }
 
-        // Weapons
-        private void RandomizeWeapons_CheckedChanged(object sender, EventArgs e)
+        // Loot
+        private void RandomizeLoot_CheckedChanged(object sender, EventArgs e)
         {
-            randomizer.randomizeWeapons = RandomizeWeapons.Checked;
-            WeaponComboBox.Enabled = RandomizeWeapons.Checked;
+            randomizer.randomizeLoot = RandomizeLoot.Checked;
+            LootOptions.Enabled = RandomizeLoot.Checked;
         }
 
-        private void WeaponComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void LootOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(WeaponComboBox.Text == "Fully Randomized")
+            if(LootOptions.SelectedIndex == 0)
             {
-                randomizer.weaponRandomizationType = WeaponRandomization.FullyRandom;
+                randomizer.weapons = LootOptions.GetItemChecked(0);
             }
-            else if (WeaponComboBox.Text == "Weapons & Abilities Split")
+            else if(LootOptions.SelectedIndex == 1)
             {
-                randomizer.weaponRandomizationType = WeaponRandomization.WeaponAbilitySplit;
+                randomizer.abilities = LootOptions.GetItemChecked(1);
+            }
+            else if (LootOptions.SelectedIndex == 2)
+            {
+                randomizer.upgrades = LootOptions.GetItemChecked(2);
+            }
+            else if (LootOptions.SelectedIndex == 3)
+            {
+                randomizer.loot = LootOptions.GetItemChecked(3);
             }
         }
 
@@ -106,7 +112,7 @@ namespace WindowsFormsApp1
         // Randomize
         private void Randomize_Click(object sender, EventArgs e)
         {
-            if (randomizer.randomizeLevels == false && randomizer.randomizeWeapons == false)
+            if (randomizer.randomizeLevels == false && randomizer.randomizeLoot == false)
                 return;
 
             if (SeedTextBox.Text == "")
@@ -119,8 +125,8 @@ namespace WindowsFormsApp1
             if (randomizer.randomizeLevels)
                 randomizer.RandomizeLevelOrder(rand, folderPath);
 
-            if (randomizer.randomizeWeapons)
-                randomizer.RandomizeWeapons(rand, folderPath);
+            if (randomizer.randomizeLoot)
+                randomizer.RandomizeLoot(rand, folderPath);
 
             randomizer.EditLevelScripts(folderPath);
         }
@@ -146,6 +152,5 @@ namespace WindowsFormsApp1
         {
             folderPath = PathTextBox.Text;
         }
-
     }
 }

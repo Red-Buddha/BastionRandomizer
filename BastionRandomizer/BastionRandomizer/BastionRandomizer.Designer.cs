@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApp1
+﻿namespace BastionRandomiztion
 {
     partial class BastionRandomizer
     {
@@ -30,16 +30,16 @@
         {
             this.RandomizeLevelOrder = new System.Windows.Forms.CheckBox();
             this.Randomize = new System.Windows.Forms.Button();
-            this.RandomizeWeapons = new System.Windows.Forms.CheckBox();
+            this.RandomizeLoot = new System.Windows.Forms.CheckBox();
             this.Unrandomize = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.FolderSelect = new System.Windows.Forms.Button();
             this.PathTextBox = new System.Windows.Forms.RichTextBox();
-            this.WeaponComboBox = new System.Windows.Forms.ComboBox();
             this.SeedTextBox = new System.Windows.Forms.TextBox();
             this.SeedLabel = new System.Windows.Forms.Label();
             this.RemoveCutscenes = new System.Windows.Forms.CheckBox();
             this.RemoveHub = new System.Windows.Forms.CheckBox();
+            this.LootOptions = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // RandomizeLevelOrder
@@ -65,18 +65,18 @@
             this.Randomize.UseVisualStyleBackColor = true;
             this.Randomize.Click += new System.EventHandler(this.Randomize_Click);
             // 
-            // RandomizeWeapons
+            // RandomizeLoot
             // 
-            this.RandomizeWeapons.AutoSize = true;
-            this.RandomizeWeapons.Checked = true;
-            this.RandomizeWeapons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.RandomizeWeapons.Location = new System.Drawing.Point(12, 35);
-            this.RandomizeWeapons.Name = "RandomizeWeapons";
-            this.RandomizeWeapons.Size = new System.Drawing.Size(128, 17);
-            this.RandomizeWeapons.TabIndex = 2;
-            this.RandomizeWeapons.Text = "Randomize Weapons";
-            this.RandomizeWeapons.UseVisualStyleBackColor = true;
-            this.RandomizeWeapons.CheckedChanged += new System.EventHandler(this.RandomizeWeapons_CheckedChanged);
+            this.RandomizeLoot.AutoSize = true;
+            this.RandomizeLoot.Checked = true;
+            this.RandomizeLoot.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RandomizeLoot.Location = new System.Drawing.Point(170, 12);
+            this.RandomizeLoot.Name = "RandomizeLoot";
+            this.RandomizeLoot.Size = new System.Drawing.Size(103, 17);
+            this.RandomizeLoot.TabIndex = 2;
+            this.RandomizeLoot.Text = "Randomize Loot";
+            this.RandomizeLoot.UseVisualStyleBackColor = true;
+            this.RandomizeLoot.CheckedChanged += new System.EventHandler(this.RandomizeLoot_CheckedChanged);
             // 
             // Unrandomize
             // 
@@ -107,19 +107,6 @@
             this.PathTextBox.TabIndex = 5;
             this.PathTextBox.Text = "";
             this.PathTextBox.TextChanged += new System.EventHandler(this.PathTextBox_TextChanged);
-            // 
-            // WeaponComboBox
-            // 
-            this.WeaponComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.WeaponComboBox.FormattingEnabled = true;
-            this.WeaponComboBox.Items.AddRange(new object[] {
-            "Fully Random",
-            "Weapons & Abilities Split"});
-            this.WeaponComboBox.Location = new System.Drawing.Point(146, 31);
-            this.WeaponComboBox.Name = "WeaponComboBox";
-            this.WeaponComboBox.Size = new System.Drawing.Size(160, 21);
-            this.WeaponComboBox.TabIndex = 7;
-            this.WeaponComboBox.SelectedIndexChanged += new System.EventHandler(this.WeaponComboBox_SelectedIndexChanged);
             // 
             // SeedTextBox
             // 
@@ -162,20 +149,37 @@
             this.RemoveHub.UseVisualStyleBackColor = true;
             this.RemoveHub.CheckedChanged += new System.EventHandler(this.RemoveHub_CheckedChanged);
             // 
+            // LootOptions
+            // 
+            this.LootOptions.BackColor = System.Drawing.SystemColors.Control;
+            this.LootOptions.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.LootOptions.CheckOnClick = true;
+            this.LootOptions.FormattingEnabled = true;
+            this.LootOptions.Items.AddRange(new object[] {
+            "Weapons",
+            "Abilities",
+            "Upgrades",
+            "Loot"});
+            this.LootOptions.Location = new System.Drawing.Point(188, 35);
+            this.LootOptions.Name = "LootOptions";
+            this.LootOptions.Size = new System.Drawing.Size(70, 60);
+            this.LootOptions.TabIndex = 12;
+            this.LootOptions.SelectedIndexChanged += new System.EventHandler(this.LootOptions_SelectedIndexChanged);
+            // 
             // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 213);
+            this.Controls.Add(this.LootOptions);
             this.Controls.Add(this.RemoveHub);
             this.Controls.Add(this.RemoveCutscenes);
             this.Controls.Add(this.SeedLabel);
             this.Controls.Add(this.SeedTextBox);
-            this.Controls.Add(this.WeaponComboBox);
             this.Controls.Add(this.PathTextBox);
             this.Controls.Add(this.FolderSelect);
             this.Controls.Add(this.Unrandomize);
-            this.Controls.Add(this.RandomizeWeapons);
+            this.Controls.Add(this.RandomizeLoot);
             this.Controls.Add(this.Randomize);
             this.Controls.Add(this.RandomizeLevelOrder);
             this.Name = "BastionRandomizer";
@@ -190,16 +194,16 @@
 
         private System.Windows.Forms.CheckBox RandomizeLevelOrder;
         private System.Windows.Forms.Button Randomize;
-        private System.Windows.Forms.CheckBox RandomizeWeapons;
+        private System.Windows.Forms.CheckBox RandomizeLoot;
         private System.Windows.Forms.Button Unrandomize;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button FolderSelect;
         private System.Windows.Forms.RichTextBox PathTextBox;
-        private System.Windows.Forms.ComboBox WeaponComboBox;
         private System.Windows.Forms.TextBox SeedTextBox;
         private System.Windows.Forms.Label SeedLabel;
         private System.Windows.Forms.CheckBox RemoveCutscenes;
         private System.Windows.Forms.CheckBox RemoveHub;
+        private System.Windows.Forms.CheckedListBox LootOptions;
     }
 }
 

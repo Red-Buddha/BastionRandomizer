@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BastionRandomizer.Properties
+namespace BastionRandomiztion.Properties
 {
 
 
