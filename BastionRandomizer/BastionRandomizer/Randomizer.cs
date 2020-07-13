@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp1
+namespace BastionRandomiztion
 {
     class Randomizer
     {
@@ -17,132 +17,17 @@ namespace WindowsFormsApp1
         private int[] randomLevelOrder;
 
         public bool randomizeLevels;
-        public bool randomizeWeapons;
+        public bool randomizeLoot;
         public bool noCutscenes;
         public bool noHub;
-        public WeaponRandomization weaponRandomizationType = WeaponRandomization.FullyRandom;
+        public bool weapons;
+        public bool abilities;
+        public bool loot;
+        public bool upgrades;
+        public bool cores;
+        public bool guaranteeWeapon;
 
-
-        private List<LevelInfo> levelInfos = new List<LevelInfo>()
-        {
-            new LevelInfo("ProtoIntro01b", "GUI\\Shell\\level_icons\\map_protointro01b", "Menu_21", "ProtoIntro01b_Completed", 0),
-            new LevelInfo("ProtoTown03", "GUI\\Shell\\level_icons\\map_prototown01", "ProtoTown03_154", "", 0),
-            new LevelInfo("Crossroads01", "GUI\\Shell\\level_icons\\map_crossroads01", "Menu_33", "Crossroads01_Completed", 99),
-            new LevelInfo("Challenge01", "GUI\\Shell\\level_icons\\map_challenge01", "Menu_26", "Challenge01_Completed", 99),
-            new LevelInfo("Holdout01", "GUI\\Shell\\level_icons\\map_holdout01", "Menu_31", "Holdout01_Completed", 99),
-            new LevelInfo("Falling01", "GUI\\Shell\\level_icons\\map_falling01", "Menu_22", "Falling01_Completed", 99),
-            new LevelInfo("Challenge03", "GUI\\Shell\\level_icons\\map_challenge03", "Challenge03_24", "Challenge03_Completed", 99),
-            new LevelInfo("Challenge06", "GUI\\Shell\\level_icons\\map_challenge06", "Challenge06_18", "Challenge06_Completed", 99),
-            new LevelInfo("Survivor01", "GUI\\Shell\\level_icons\\map_survivor01", "Menu_25", "Survivor01_Completed", 99),
-            new LevelInfo("Siege01", "GUI\\Shell\\level_icons\\map_seige01", "Siege01_65", "Siege01_Completed", 99),
-            new LevelInfo("Shrine01", "GUI\\Shell\\level_icons\\map_shrine01", "Menu_57", "Shrine01_Completed", 99),
-            new LevelInfo("Challenge04", "GUI\\Shell\\level_icons\\map_challenge04", "Challenge04_19", "Challenge04_Completed", 99),
-            new LevelInfo("Challenge02", "GUI\\Shell\\level_icons\\map_challenge02", "Challenge02_24", "Challenge02_Completed", 99),
-            new LevelInfo("Challenge07", "GUI\\Shell\\level_icons\\map_challenge07", "Challenge07_20", "Challenge07_Completed", 99),
-            new LevelInfo("Moving01", "GUI\\Shell\\level_icons\\map_moving01", "Moving01_71", "Moving01_Completed", 99),
-            new LevelInfo("Survivor02", "GUI\\Shell\\level_icons\\map_survivor02", "ProtoTown03_144", "Survivor02_Completed", 99),
-            new LevelInfo("Crossroads02", "GUI\\Shell\\level_icons\\map_crossroads02", "Menu_58", "Crossroads02_Completed", 99),
-            new LevelInfo("Scenes02", "GUI\\Shell\\level_icons\\map_scenes01", "Menu_61", "Scenes02_Completed", 99),
-            new LevelInfo("Hunt01", "GUI\\Shell\\level_icons\\map_hunt01", "Menu_60", "Hunt01_Completed", 99),
-            new LevelInfo("Challenge10", "GUI\\Shell\\level_icons\\map_challenge10", "ProtoTown03_116", "Challenge10_Completed", 99),
-            new LevelInfo("Challenge09", "GUI\\Shell\\level_icons\\map_challenge09", "ProtoTown03_118", "Challenge09_Completed", 99),
-            new LevelInfo("Platforms01", "GUI\\Shell\\level_icons\\map_platforms01", "Menu_62", "Platforms01_Completed", 99),
-            new LevelInfo("Challenge05", "GUI\\Shell\\level_icons\\map_challenge05", "ProtoTown03_108", "Challenge05_Completed", 99),
-            new LevelInfo("Scorched01", "GUI\\Shell\\level_icons\\map_scorched01", "ProtoTown03_73", "Scorched01_Completed", 99),
-            new LevelInfo("Challenge08", "GUI\\Shell\\level_icons\\map_challenge08", "ProtoTown03_120", "Challenge08_Completed", 99),
-            new LevelInfo("Fortress01", "GUI\\Shell\\level_icons\\map_fortress01", "ProtoTown03_67", "Fortress01_Completed", 99),
-            new LevelInfo("Challenge11", "GUI\\Shell\\level_icons\\map_challenge11", "ProtoTown03_117", "Challenge11_Completed", 99),
-            new LevelInfo("Gauntlet01", "GUI\\Shell\\level_icons\\map_gauntlet01", "ProtoTown03_74", "Gauntlet01_Completed", 99),
-            new LevelInfo("Voyage01", "GUI\\Shell\\level_icons\\map_voyage01", "ProtoTown03_236", "Voyage01_Completed", 99),
-            new LevelInfo("Rescue01", "GUI\\Shell\\level_icons\\map_rescue01", "ProtoTown03_159", "Rescue01_Completed", 99),
-            new LevelInfo("Challenge12", "GUI\\Shell\\level_icons\\map_challenge12", "ProtoTown03_119", "Challenge12_Completed", 99),
-            new LevelInfo("FinalArena01", "GUI\\Shell\\level_icons\\map_finalArena01", "ProtoTown03_101", "", 99)
-        };
-        private List<WeaponInfo> weaponInfos = new List<WeaponInfo>()
-        {
-            // Weapons
-            new WeaponInfo("Hammer", "Hammer_Kit"),
-            new WeaponInfo("ShieldBash", "Shield_Kit"),
-            new WeaponInfo("Longbow", "Longbow_Kit"),
-            new WeaponInfo("Repeater", "Repeater_Kit"),
-            new WeaponInfo("Revolvers", "Revolvers_Kit"),
-            new WeaponInfo("Rifle", "Rifle_Kit"),
-            new WeaponInfo("Mortar", "Mortar_Kit"),
-            new WeaponInfo("Machete", "Machete_Kit"),
-            new WeaponInfo("Spear", "Spear_Kit"),
-            new WeaponInfo("Flamethrower", "Flamethrower_Kit"),
-            new WeaponInfo("Shotgun", "Shotgun_Kit"),
-            new WeaponInfo("Cannon", "Cannon_Kit"),
-            new WeaponInfo("RamSwipe", "Ram_Kit"),
-
-            // Skills
-            new WeaponInfo("Shield_SummonSquirt", "WeaponSkillBook"),
-            new WeaponInfo("Mine", "Mine_Kit"),
-            new WeaponInfo("Grenade", "Grenade_Kit"),
-            new WeaponInfo("PlayerDopplewalk", "WeaponSkillBook"),
-            new WeaponInfo("PlayerFullDeflection", "WeaponSkillBook"),
-            new WeaponInfo("PlayerAreaRoot", "WeaponSkillBook"),
-            new WeaponInfo("SummonPortalTurret", "WeaponSkillBook"),
-
-            // Weapon Skills
-            new WeaponInfo("Hammer_Whirlwind", "WeaponSkillBook"),
-            new WeaponInfo("Hammer_GroundPound", "WeaponSkillBook"),
-            new WeaponInfo("Repeater_TwirlShot", "WeaponSkillBook"),
-            new WeaponInfo("Repeater_TranqDart", "WeaponSkillBook"),
-            new WeaponInfo("Longbow_BouncingShot", "WeaponSkillBook"),
-            new WeaponInfo("Longbow_ArrowStorm", "WeaponSkillBook"),
-            new WeaponInfo("Machete_BladeStorm", "WeaponSkillBook"),
-            new WeaponInfo("Machete_GhostBlade", "WeaponSkillBook"),
-            new WeaponInfo("Rifle_LaserShot", "WeaponSkillBook"),
-            new WeaponInfo("Rifle_StickyBomb", "WeaponSkillBook"),
-            new WeaponInfo("Flamethrower_Whirlwind", "WeaponSkillBook"),
-            new WeaponInfo("Flamethrower_Nova", "WeaponSkillBook"),
-            new WeaponInfo("Shotgun_BulletRain", "WeaponSkillBook"),
-            new WeaponInfo("Shotgun_FullAuto", "WeaponSkillBook"),
-            new WeaponInfo("Revolvers_MagnumShot", "WeaponSkillBook"),
-            new WeaponInfo("Revolvers_FullAuto", "WeaponSkillBook"),
-            new WeaponInfo("Spear_Jump", "WeaponSkillBook"),
-            new WeaponInfo("Spear_Spin", "WeaponSkillBook"),
-            new WeaponInfo("Mortar_MultiShot", "WeaponSkillBook"),
-            new WeaponInfo("Mortar_SummonTurret", "WeaponSkillBook"),
-            new WeaponInfo("Cannon_Bomblettes", "WeaponSkillBook"),
-            new WeaponInfo("Cannon_RocketStorm", "WeaponSkillBook"),
-            new WeaponInfo("Ram_Earthquake", "WeaponSkillBook"),
-
-            // Hopscotch
-            new WeaponInfo("Jump", "Jump_Kit")
-        };
-        private List<MapData> Maps = new List<MapData>()
-        {
-            new MapData("ProtoIntro01", 162680, 184473), // done // playerunit 753, hammer_kit 7788
-            new MapData("ProtoIntro01a", 5403, 24944), // done
-            new MapData("ProtoIntro01b", 347870, 398029), // done // skyway 964
-            new MapData("ProtoTown03", 78205, 336088), // done
-            new MapData("Crossroads01", 137016, 160204), // done
-            new MapData("Falling01", 266414, 294645), // done
-            new MapData("Holdout01", 50113, 81129), // done
-            new MapData("Survivor01", 246383, 270542), // done
-            new MapData("Siege01", 494398, 529044), // done
-            new MapData("Shrine01", 62091, 79561), // done
-            new MapData("Moving01", 185518, 239299), // done
-            new MapData("Survivor02", 192028, 209719), // done
-            new MapData("Crossroads02", 119717, 151533), // done
-            new MapData("Scenes02", 105982, 124570), // done
-            new MapData("Scenes01", 215662, 241492), // done
-            new MapData("Hunt01", 136779, 175315), // done
-            new MapData("Platforms01", 138589, 166472), // done
-            new MapData("Scorched01", 228476, 248326), // done
-            new MapData("Fortress01", 125951, 143919), // done
-            new MapData("Gauntlet01", 528136, 555335), // done
-            new MapData("Attack01", 59356, 83547), // done
-            new MapData("Voyage01", 281032, 310044), // done
-            new MapData("Rescue01", 302309, 334535), // done
-            new MapData("FinalArena01", 222273, 246873), // done
-            new MapData("FinalChase01", 292107, 309619), // done
-            new MapData("FinalRam01", 101060, 116054), // done
-            new MapData("FinalZulf01", 235804, 277706) // done
-        };
-
+        GameData data = new GameData();
 
 
         private int[] Shuffle(Random rand, int[] array)
@@ -180,7 +65,7 @@ namespace WindowsFormsApp1
             {
                 newOrder[tempOrder[j]] = randomLevelOrder[j];
             }
-            
+
             SetMapValues(newOrder, path);
         }
 
@@ -193,63 +78,91 @@ namespace WindowsFormsApp1
 
             for (int i = 0; i < order.Length; ++i)
             {
-                LevelInfo temp = levelInfos[order[i]];
+                LevelInfo temp = data.levelInfos[order[i]];
 
-                levels[i].Attributes["Name"].InnerXml = temp._name;
-                levels[i].Attributes["Graphic"].InnerXml = temp._graphic;
-                levels[i].Attributes["AudioCue"].InnerXml = temp._audio;
+                levels[i].Attributes["Name"].InnerXml = temp.name;
+                levels[i].Attributes["Graphic"].InnerXml = temp.graphic;
+                levels[i].Attributes["AudioCue"].InnerXml = temp.audio;
 
                 if (i >= 3)
-                    levels[i].Attributes["GoalPiecesRequired"].InnerXml = temp._cores.ToString();
+                    levels[i].Attributes["GoalPiecesRequired"].InnerXml = temp.cores.ToString();
 
                 if (levels[i].Attributes["CompletedTextId"] != null)
-                    levels[i].Attributes["CompletedTextId"].InnerXml = temp._completedtext;
+                    levels[i].Attributes["CompletedTextId"].InnerXml = temp.completedtext;
             }
 
             doc.Save(path + "/Content/Game/MapLayouts.xml");
         }
+
+        ////////////////////////////
+        /// ITEM RANDOMIZATION ///
+        ////////////////////////////
         
-        ////////////////////////////
-        /// WEAPON RANDOMIZATION ///
-        ////////////////////////////
-
-        public void RandomizeWeapons(Random rand, string path)
+        public void RandomizeLoot(Random rand, string path)
         {
-            int[] newOrder = Enumerable.Range(0, 43).ToArray();
+            if(weapons)
+                data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Weapon));
+            if (abilities)
+                data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Ability));
+            if (upgrades)
+                data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Upgrade));
+            if (loot)
+                data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Generic));
+            if (cores)
+                data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Core));
 
-            if(weaponRandomizationType == WeaponRandomization.WeaponAbilitySplit)
-            {
-                int[] weaponOrder = Enumerable.Range(0, 13).ToArray();
-                int[] abilityOrder = Enumerable.Range(13, 30).ToArray();
+            int[] newOrder = Enumerable.Range(0, data.randomizedLoot.Count).ToArray();
+                        
+            newOrder = Shuffle(rand, newOrder);
 
-                weaponOrder = Shuffle(rand, weaponOrder);
-                abilityOrder = Shuffle(rand, abilityOrder);
-                
-                Array.Copy(weaponOrder, newOrder, weaponOrder.Length);
-                Array.Copy(abilityOrder, 0, newOrder, weaponOrder.Length, abilityOrder.Length);
-            }
-            else
-               newOrder = Shuffle(rand, newOrder);
-            
-            SetWeaponValues(newOrder, path);
+            SetLootValues(newOrder, path);
         }
 
-        private void SetWeaponValues( int[] order, string path)
+        private void SetLootValues(int[] order, string path)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(path + "/Content/Game/Loot/WeaponKits.original.xml");
+            //FileStream file = new FileStream("test.txt", FileMode.Create);
+            //StreamWriter stream = new StreamWriter(file);
 
-            var loot = doc.GetElementsByTagName("Loot");
+            List<Loot> tempLoot = new List<Loot>(data.randomizedLoot.Count);
+            foreach (Loot loot in data.randomizedLoot)
+            {
+                tempLoot.Add(new Loot(loot));
+            }
 
             for (int i = 0; i < order.Length; ++i)
             {
-                WeaponInfo temp = weaponInfos[order[i]];
+                Loot temp = tempLoot[order[i]];
 
-                loot[i].Attributes["Name"].InnerXml = temp._name;
-                loot[i].Attributes["Graphic"].InnerXml = temp._graphic;
+                data.randomizedLoot[i].name = temp.name;
+                data.randomizedLoot[i].type = temp.type;
             }
 
-            doc.Save(path + "/Content/Game/Loot/WeaponKits.xml");
+            if(guaranteeWeapon && data.randomizedLoot[0].type != LootType.Weapon)
+            {
+                for(int i = 0; i < data.randomizedLoot.Count; ++i)
+                {
+                    if(data.randomizedLoot[i].type == LootType.Weapon)
+                    {
+                        Loot temp = new Loot(data.randomizedLoot[i]);
+
+                        data.randomizedLoot[i].name = data.randomizedLoot[0].name;
+                        data.randomizedLoot[i].type = data.randomizedLoot[0].type;
+
+                        data.randomizedLoot[0].name = temp.name;
+                        data.randomizedLoot[0].type = temp.type;
+
+                        break;
+                    }
+                }
+            }
+
+            //for(int j = 0; j < data.randomizedLoot.Count; ++j)
+            //{
+            //    stream.WriteLine(data.randomizedLoot[j].name + " " + data.randomizedLoot[j].levelIndex);
+            //}
+
+            //stream.Close();
+            //file.Close();
         }
 
         ///////////////////////
@@ -354,25 +267,40 @@ namespace WindowsFormsApp1
         public void EditLevelScripts(string path)
         {
             // Rippling Walls
-            //ReadScript(path, Maps[0]);
-            //WriteScript(path, Maps[0]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[0]);
+                SetLevelLoot(0);
+                WriteScript(path, data.Maps[0]);
+            }
 
             // Sole Regret
-            //ReadScript(path, Maps[1]);
-            //WriteScript(path, Maps[1]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[1]);
+                SetLevelLoot(1);
+                WriteScript(path, data.Maps[1]);
+            }
 
             // Wharf District
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[2]);
-                WharfSkipHub();
-                WriteScript(path, Maps[2]);
+                ReadScript(path, data.Maps[2]);
+                if (noHub)
+                {
+                    WharfSkipHub();
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(2);
+                }
+                WriteScript(path, data.Maps[2]);
             }
 
             // Bastion
-            if (randomizeLevels || noCutscenes)
+            if (randomizeLevels || noCutscenes || randomizeLoot)
             {
-                ReadScript(path, Maps[3]);
+                ReadScript(path, data.Maps[3]);
                 if (randomizeLevels)
                 {
                     SetLevelOrder();
@@ -382,21 +310,32 @@ namespace WindowsFormsApp1
                 {
                     RemoveBastionCutscenes();
                 }
-                WriteScript(path, Maps[3]);
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(3);
+                }
+                WriteScript(path, data.Maps[3]);
             }
 
             // Workmen Ward
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[4]);
-                WorkmenSkipHub(2);
-                WriteScript(path, Maps[4]);
+                ReadScript(path, data.Maps[4]);
+                if (noHub)
+                {
+                    WorkmenSkipHub(2);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(4);
+                }
+                WriteScript(path, data.Maps[4]);
             }
 
             // Sundown Path
-            if (noCutscenes || noHub)
+            if (noCutscenes || noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[5]);
+                ReadScript(path, data.Maps[5]);
                 if (noCutscenes)
                 {
                     RemoveSundownCutscene();
@@ -405,173 +344,334 @@ namespace WindowsFormsApp1
                 {
                     SundownSkipHub(5);
                 }
-                WriteScript(path, Maps[5]);
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(5);
+                }
+                WriteScript(path, data.Maps[5]);
             }
 
             // Melting Pot
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[6]);
-                MeltingSkipHub(4);
-                WriteScript(path, Maps[6]);
+                ReadScript(path, data.Maps[6]);
+                if (noHub)
+                {
+                    MeltingSkipHub(4);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(6);
+                }
+                WriteScript(path, data.Maps[6]);
             }
 
             // Hanging Gardens
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[7]);
-                GardensSkipHub(8);
-                WriteScript(path, Maps[7]);
+                ReadScript(path, data.Maps[7]);
+                if (noHub)
+                {
+                    GardensSkipHub(8);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(7);
+                }
+                WriteScript(path, data.Maps[7]);
             }
 
             // Cinderbrick Fort
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[8]);
-                CinderbrickSkipHub(9);
-                WriteScript(path, Maps[8]);
+                ReadScript(path, data.Maps[8]);
+                if (noHub)
+                {
+                    CinderbrickSkipHub(9);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(8);
+                }
+                WriteScript(path, data.Maps[8]);
             }
 
             // Pyth Orchard
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[9]);
-                PythSkipHub(10);
-                WriteScript(path, Maps[9]);
+                ReadScript(path, data.Maps[9]);
+                if (noHub)
+                {
+                    PythSkipHub(10);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(9);
+                }
+                WriteScript(path, data.Maps[9]);
             }
 
             // Langston
-            if (randomizeLevels || noHub)
+            if (randomizeLevels || noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[10]);
+                ReadScript(path, data.Maps[10]);
                 if (randomizeLevels)
                 {
                     UncoupleLangston();
                 }
-                if(noHub)
+                if (noHub)
                 {
                     LangstonSkipHub(14);
                 }
-                WriteScript(path, Maps[10]);
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(10);
+                }
+                WriteScript(path, data.Maps[10]);
             }
 
             // Prosper Bluff
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[11]);
-                ProsperSkipHub(15);
-                WriteScript(path, Maps[11]);
+                ReadScript(path, data.Maps[11]);
+                if (noHub)
+                {
+                    ProsperSkipHub(15);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(11);
+                }
+                WriteScript(path, data.Maps[11]);
             }
 
             // Wild Outskirts
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[12]);
-                OutskirtsSkipHub(16);
-                WriteScript(path, Maps[12]);
+                ReadScript(path, data.Maps[12]);
+                if (noHub)
+                {
+                    OutskirtsSkipHub(16);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(12);
+                }
+                WriteScript(path, data.Maps[12]);
             }
 
             // Jawson Bog
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[13]);
-                JawsonSkipHub(17);
-                WriteScript(path, Maps[13]);
+                ReadScript(path, data.Maps[13]);
+                if (noHub)
+                {
+                    JawsonSkipHub(17);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(13);
+                }
+                WriteScript(path, data.Maps[13]);
             }
 
             // Jawson Dream
-            if (noCutscenes)
+            if (randomizeLevels || noCutscenes || randomizeLoot)
             {
-                ReadScript(path, Maps[14]);
-                RemoveDreamCutscene();
-                WriteScript(path, Maps[14]);
+                ReadScript(path, data.Maps[14]);
+                if(randomizeLevels)
+                {
+                    RemoveDreamMonument();
+                }
+                if (noCutscenes)
+                {
+                    RemoveDreamCutscene();
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(14);
+                }
+                
+                WriteScript(path, data.Maps[14]);
             }
 
             // Roathus Lagoon
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[15]);
-                RoathusSkipHub(18);
-                WriteScript(path, Maps[15]);
+                ReadScript(path, data.Maps[15]);
+                if (noHub)
+                {
+                    RoathusSkipHub(18);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(15);
+                }
+                WriteScript(path, data.Maps[15]);
             }
 
             // Point Lemaign
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[16]);
-                LemaignSkipHub(21);
-                WriteScript(path, Maps[16]);
+                ReadScript(path, data.Maps[16]);
+                if (noHub)
+                {
+                    LemaignSkipHub(21);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(16);
+                }
+                WriteScript(path, data.Maps[16]);
             }
 
             // Colford Cauldron
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[17]);
-                ColfordSkipHub(23);
-                WriteScript(path, Maps[17]);
+                ReadScript(path, data.Maps[17]);
+                if (noHub)
+                {
+                    ColfordSkipHub(23);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(17);
+                }
+                WriteScript(path, data.Maps[17]);
             }
 
             // Mount Zand
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[18]);
-                ZandSkipHub(25);
-                WriteScript(path, Maps[18]);
+                ReadScript(path, data.Maps[18]);
+                if (noHub)
+                {
+                    ZandSkipHub(25);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(18);
+                }
+                WriteScript(path, data.Maps[18]);
             }
 
             // Burstone Quarry
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[19]);
-                // Invasion skip makes skipping hub not possible so its removed from the mode for now
-                BurstoneSkipHub(27);
-                WriteScript(path, Maps[19]);
+                ReadScript(path, data.Maps[19]);
+                if (noHub)
+                {
+                    // Invasion skip makes skipping hub not possible so its removed from the mode for now
+                    BurstoneSkipHub(27);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(19);
+                }
+                WriteScript(path, data.Maps[19]);
             }
 
             // Ura Invasion
-            //ReadScript(path, Maps[20]);
-            //WriteScript(path, Maps[20]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[20]);
+                SetLevelLoot(20);
+                WriteScript(path, data.Maps[20]);
+            }
 
             // Urzendra Gate
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[21]);
-                UrzendraSkipHub(28);
-                WriteScript(path, Maps[21]);
+                ReadScript(path, data.Maps[21]);
+                if (noHub)
+                {
+                    UrzendraSkipHub(28);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(21);
+                }
+                WriteScript(path, data.Maps[21]);
             }
 
             // Zulten's Hollow
-            if (noHub)
+            if (noHub || randomizeLoot)
             {
-                ReadScript(path, Maps[22]);
-                ZultenSkipHub(29);
-                WriteScript(path, Maps[22]);
+                ReadScript(path, data.Maps[22]);
+                if (noHub)
+                {
+                    ZultenSkipHub(29);
+                }
+                if (randomizeLoot)
+                {
+                    SetLevelLoot(22);
+                }
+                WriteScript(path, data.Maps[22]);
             }
 
             // Tazal 1
-            //ReadScript(path, Maps[23]);
-            //WriteScript(path, Maps[23]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[23]);
+                SetLevelLoot(23);
+                WriteScript(path, data.Maps[23]);
+            }
 
             // Tazal 2
-            //ReadScript(path, Maps[24]);
-            //WriteScript(path, Maps[24]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[24]);
+                SetLevelLoot(24);
+                WriteScript(path, data.Maps[24]);
+            }
 
             // Tazal 3
-            //ReadScript(path, Maps[25]);
-            //WriteScript(path, Maps[25]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[25]);
+                SetLevelLoot(25);
+                WriteScript(path, data.Maps[25]);
+            }
 
             // Tazal 4
-            //ReadScript(path, Maps[26]);
-            //WriteScript(path, Maps[26]);
+            if (randomizeLoot)
+            {
+                ReadScript(path, data.Maps[26]);
+                SetLevelLoot(26);
+                WriteScript(path, data.Maps[26]);
+            }
         }
 
         #region Level Functions
 
+        private void SetLevelLoot(int index)
+        {
+            List<Loot> levelLoot = data.randomizedLoot.FindAll(x => x.levelIndex == index);
+            levelLoot.Sort((x, y) => y.start.CompareTo(x.start));
+
+            List<byte> tempdata = mapDataBlock2.ToList();
+
+            for (int i = 0; i < levelLoot.Count; ++i)
+            {
+                int range = levelLoot[i].end - levelLoot[i].start + 1;
+                tempdata.RemoveRange(levelLoot[i].start, range);
+
+                // adding the length of the string to the front
+                List<byte> lootName = new List<byte>();
+                lootName.Add((byte)levelLoot[i].name.Length);
+                lootName.AddRange(Encoding.UTF8.GetBytes(levelLoot[i].name));
+
+                tempdata.InsertRange(levelLoot[i].start, lootName);
+            }
+
+            mapDataBlock2 = tempdata.ToArray();
+        }
+
         #region Wharf District
         private void WharfSkipHub()
         {
-            scripts[18] = "OnFlagTrue HeFell LoadMap " + levelInfos[randomLevelOrder[0]]._name + " ; DelaySeconds = 1.25\r\n";
-            scripts[965] = "OnUsed 964 LoadMap " + levelInfos[randomLevelOrder[0]]._name + "\r\n";
+            scripts[18] = "OnFlagTrue HeFell LoadMap " + data.levelInfos[randomLevelOrder[0]].name + " ; DelaySeconds = 1.25\r\n";
+            scripts[965] = "OnUsed 964 LoadMap " + data.levelInfos[randomLevelOrder[0]].name + "\r\n";
         }
         #endregion
 
@@ -590,14 +690,14 @@ namespace WindowsFormsApp1
             // clearing out original unlocks
             for (int j = 0; j < 53; ++j)
                 scripts[3543 + j] = "\r\n";
-            
+
             // adding randomized level order
             for (int i = 0; i < randomLevelOrder.Length - 1; ++i)
             {
-                scripts[3544 + i] = "OnLoad SetFlagTrue MAPS_UNLOCKED " + levelInfos[randomLevelOrder[i + 1]]._name + " ; RequiredFlag = FlagGlobalComplete" + levelInfos[randomLevelOrder[i]]._name + " ; SaveStatus = true\r\n";
+                scripts[3544 + i] = "OnLoad SetFlagTrue MAPS_UNLOCKED " + data.levelInfos[randomLevelOrder[i + 1]].name + " ; RequiredFlag = FlagGlobalComplete" + data.levelInfos[randomLevelOrder[i]].name + " ; SaveStatus = true\r\n";
             }
 
-            scripts[3544 + randomLevelOrder.Length - 1] = "OnLoad SetFlagTrue MAPS_UNLOCKED FinalArena01 ; RequiredFlag = FlagGlobalComplete" + levelInfos[randomLevelOrder[randomLevelOrder.Length - 1]]._name + " ; SaveStatus = true\r\n";
+            scripts[3544 + randomLevelOrder.Length - 1] = "OnLoad SetFlagTrue MAPS_UNLOCKED FinalArena01 ; RequiredFlag = FlagGlobalComplete" + data.levelInfos[randomLevelOrder[randomLevelOrder.Length - 1]].name + " ; SaveStatus = true\r\n";
         }
 
         private void RemoveBastionCutscenes()
@@ -613,16 +713,16 @@ namespace WindowsFormsApp1
         #region Workmen Ward
         private void WorkmenSkipHub(int index)
         {
-            for(int i = 0; i < randomLevelOrder.Length; ++i)
+            for (int i = 0; i < randomLevelOrder.Length; ++i)
             {
-                if(randomLevelOrder[i] == index)
+                if (randomLevelOrder[i] == index)
                 {
                     string levelname;
 
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[591] = "OnUsed 9066 LoadMap " + levelname + "\r\n";
 
@@ -649,7 +749,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     if (noCutscenes)
                         scripts[605] = "OnFlagTrue SetupEndingPan LoadMap " + levelname + " ; DelaySeconds = 1.5\r\n";
@@ -674,7 +774,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[587] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.5\r\n";
 
@@ -696,7 +796,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[513] = "OnFlagTrue SmashCut LoadMap " + levelname + " ; DelaySeconds = 0.5\r\n";
 
@@ -718,7 +818,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[821] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
 
@@ -740,7 +840,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[421] = "OnUsed VarSkyway LoadMap " + levelname + "\r\n";
 
@@ -767,7 +867,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[1213] = "\tLoadMap " + levelname + " ; DelaySeconds = 2.0 ;\r\n";
 
@@ -789,7 +889,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[510] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.35 ;\r\n";
 
@@ -811,7 +911,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[854] = "\tLoadMap " + levelname + " ; DelaySeconds = 10.5\r\n";
 
@@ -833,7 +933,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[487] = "\tLoadMap " + levelname + " ; DelaySeconds = 7.0\r\n";
 
@@ -842,8 +942,25 @@ namespace WindowsFormsApp1
             }
         }
         #endregion
-
+        
         #region Jawson Dream
+
+        // GoalStructure 151874 151887
+        private void RemoveDreamMonument()
+        {
+            List<byte> tempdata = mapDataBlock2.ToList();
+            int range = 14;
+            tempdata.RemoveRange(151874, range);
+
+            List<byte> replacement = new List<byte>();
+            replacement.Add((byte)"".Length);
+            replacement.AddRange(Encoding.UTF8.GetBytes(""));
+
+            tempdata.InsertRange(151874, replacement);
+
+            mapDataBlock2 = tempdata.ToArray();
+        }
+
         private void RemoveDreamCutscene()
         {
             scripts[765] = "\tLoadMap Scenes02 ; DelaySeconds = 3.1\r\n";
@@ -863,7 +980,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[959] = "\tLoadMap " + levelname + " ; DelaySeconds = 3.0\r\n";
 
@@ -885,7 +1002,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[711] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
 
@@ -907,7 +1024,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[552] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.5\r\n";
 
@@ -929,7 +1046,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[489] = "\tLoadMap " + levelname + " ; DelaySeconds = 5.0\r\n";
 
@@ -951,7 +1068,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[770] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
 
@@ -976,7 +1093,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[974] = "\tLoadMap " + levelname + " ; DelaySeconds = 7.0\r\n";
 
@@ -998,7 +1115,7 @@ namespace WindowsFormsApp1
                     if (i == randomLevelOrder.Length - 1)
                         levelname = "FinalArena01";
                     else
-                        levelname = levelInfos[randomLevelOrder[i + 1]]._name;
+                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
 
                     scripts[941] = "\tLoadMap " + levelname + " ; DelaySeconds = 9.0\r\n";
 
@@ -1012,55 +1129,5 @@ namespace WindowsFormsApp1
         #endregion Tazal
 
         #endregion
-    }
-
-    struct MapData
-    {
-        public MapData(string levelname, int scriptstart, int scriptend)
-        {
-            levelName = levelname;
-            scriptStart = scriptstart;
-            scriptEnd = scriptend;
-        }
-
-        public string levelName { get; }
-        public int scriptStart { get; }
-        public int scriptEnd { get; }
-    }
-
-    struct LevelInfo
-    {
-        public LevelInfo(string name, string graphic, string audio, string completedtext, int cores)
-        {
-            _name = name;
-            _graphic = graphic;
-            _audio = audio;
-            _completedtext = completedtext;
-            _cores = cores;
-        }
-
-        public string _name;
-        public string _graphic;
-        public string _audio;
-        public string _completedtext;
-        public int _cores;
-    }
-
-    struct WeaponInfo
-    {
-        public WeaponInfo(string name, string graphic)
-        {
-            _name = name;
-            _graphic = graphic;
-        }
-
-        public string _name;
-        public string _graphic;
-    }
-
-    enum WeaponRandomization
-    {
-        FullyRandom,
-        WeaponAbilitySplit
     }
 }

@@ -10,7 +10,7 @@
 
 using System.Configuration;
 
-namespace BastionRandomizer.Properties
+namespace BastionRandomiztion.Properties
 {
 
 
