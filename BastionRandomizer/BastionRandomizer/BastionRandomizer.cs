@@ -82,6 +82,11 @@ namespace BastionRandomiztion
             }
         }
 
+        private void GuaranteeWeapon_CheckedChanged(object sender, EventArgs e)
+        {
+            randomizer.guaranteeWeapon = GuaranteeWeapon.Checked;
+        }
+
         // Cutscenes
         private void RemoveCutscenes_CheckedChanged(object sender, EventArgs e)
         {

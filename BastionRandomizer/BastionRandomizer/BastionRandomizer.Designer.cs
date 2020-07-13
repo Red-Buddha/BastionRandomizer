@@ -40,6 +40,7 @@
             this.RemoveCutscenes = new System.Windows.Forms.CheckBox();
             this.RemoveHub = new System.Windows.Forms.CheckBox();
             this.LootOptions = new System.Windows.Forms.CheckedListBox();
+            this.GuaranteeWeapon = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // RandomizeLevelOrder
@@ -160,17 +161,29 @@
             "Abilities",
             "Upgrades",
             "Loot"});
-            this.LootOptions.Location = new System.Drawing.Point(188, 35);
+            this.LootOptions.Location = new System.Drawing.Point(189, 58);
             this.LootOptions.Name = "LootOptions";
             this.LootOptions.Size = new System.Drawing.Size(70, 60);
             this.LootOptions.TabIndex = 12;
             this.LootOptions.SelectedIndexChanged += new System.EventHandler(this.LootOptions_SelectedIndexChanged);
+            // 
+            // GuaranteeWeapon
+            // 
+            this.GuaranteeWeapon.AutoSize = true;
+            this.GuaranteeWeapon.Location = new System.Drawing.Point(189, 36);
+            this.GuaranteeWeapon.Name = "GuaranteeWeapon";
+            this.GuaranteeWeapon.Size = new System.Drawing.Size(120, 17);
+            this.GuaranteeWeapon.TabIndex = 13;
+            this.GuaranteeWeapon.Text = "Guarantee Weapon";
+            this.GuaranteeWeapon.UseVisualStyleBackColor = true;
+            this.GuaranteeWeapon.CheckedChanged += new System.EventHandler(this.GuaranteeWeapon_CheckedChanged);
             // 
             // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 213);
+            this.Controls.Add(this.GuaranteeWeapon);
             this.Controls.Add(this.LootOptions);
             this.Controls.Add(this.RemoveHub);
             this.Controls.Add(this.RemoveCutscenes);
@@ -204,6 +217,7 @@
         private System.Windows.Forms.CheckBox RemoveCutscenes;
         private System.Windows.Forms.CheckBox RemoveHub;
         private System.Windows.Forms.CheckedListBox LootOptions;
+        private System.Windows.Forms.CheckBox GuaranteeWeapon;
     }
 }
 

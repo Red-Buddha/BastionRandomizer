@@ -25,6 +25,7 @@ namespace BastionRandomiztion
         public bool loot;
         public bool upgrades;
         public bool cores;
+        public bool guaranteeWeapon;
 
         GameData data = new GameData();
 
@@ -111,7 +112,7 @@ namespace BastionRandomiztion
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Core));
 
             int[] newOrder = Enumerable.Range(0, data.randomizedLoot.Count).ToArray();
-            
+                        
             newOrder = Shuffle(rand, newOrder);
 
             SetLootValues(newOrder, path);
@@ -119,8 +120,8 @@ namespace BastionRandomiztion
 
         private void SetLootValues(int[] order, string path)
         {
-            FileStream file = new FileStream("test.txt", FileMode.Create);
-            StreamWriter stream = new StreamWriter(file);
+            //FileStream file = new FileStream("test.txt", FileMode.Create);
+            //StreamWriter stream = new StreamWriter(file);
 
             List<Loot> tempLoot = new List<Loot>(data.randomizedLoot.Count);
             foreach (Loot loot in data.randomizedLoot)
@@ -133,15 +134,35 @@ namespace BastionRandomiztion
                 Loot temp = tempLoot[order[i]];
 
                 data.randomizedLoot[i].name = temp.name;
+                data.randomizedLoot[i].type = temp.type;
             }
 
-            for(int j = 0; j < data.randomizedLoot.Count; ++j)
+            if(guaranteeWeapon && data.randomizedLoot[0].type != LootType.Weapon)
             {
-                stream.WriteLine(data.randomizedLoot[j].name + " " + data.randomizedLoot[j].levelIndex);
+                for(int i = 0; i < data.randomizedLoot.Count; ++i)
+                {
+                    if(data.randomizedLoot[i].type == LootType.Weapon)
+                    {
+                        Loot temp = new Loot(data.randomizedLoot[i]);
+
+                        data.randomizedLoot[i].name = data.randomizedLoot[0].name;
+                        data.randomizedLoot[i].type = data.randomizedLoot[0].type;
+
+                        data.randomizedLoot[0].name = temp.name;
+                        data.randomizedLoot[0].type = temp.type;
+
+                        break;
+                    }
+                }
             }
 
-            stream.Close();
-            file.Close();
+            //for(int j = 0; j < data.randomizedLoot.Count; ++j)
+            //{
+            //    stream.WriteLine(data.randomizedLoot[j].name + " " + data.randomizedLoot[j].levelIndex);
+            //}
+
+            //stream.Close();
+            //file.Close();
         }
 
         ///////////////////////
@@ -455,9 +476,13 @@ namespace BastionRandomiztion
             }
 
             // Jawson Dream
-            if (noCutscenes || randomizeLoot)
+            if (randomizeLevels || noCutscenes || randomizeLoot)
             {
                 ReadScript(path, data.Maps[14]);
+                if(randomizeLevels)
+                {
+                    RemoveDreamMonument();
+                }
                 if (noCutscenes)
                 {
                     RemoveDreamCutscene();
@@ -466,6 +491,7 @@ namespace BastionRandomiztion
                 {
                     SetLevelLoot(14);
                 }
+                
                 WriteScript(path, data.Maps[14]);
             }
 
@@ -916,9 +942,25 @@ namespace BastionRandomiztion
             }
         }
         #endregion
-
-        // monument needs to be disabled
+        
         #region Jawson Dream
+
+        // GoalStructure 151874 151887
+        private void RemoveDreamMonument()
+        {
+            List<byte> tempdata = mapDataBlock2.ToList();
+            int range = 14;
+            tempdata.RemoveRange(151874, range);
+
+            List<byte> replacement = new List<byte>();
+            replacement.Add((byte)"".Length);
+            replacement.AddRange(Encoding.UTF8.GetBytes(""));
+
+            tempdata.InsertRange(151874, replacement);
+
+            mapDataBlock2 = tempdata.ToArray();
+        }
+
         private void RemoveDreamCutscene()
         {
             scripts[765] = "\tLoadMap Scenes02 ; DelaySeconds = 3.1\r\n";
