@@ -104,7 +104,7 @@ namespace BastionRandomiztion
 
             // Crossroads02
             new Loot("MonumentPiece", 2131, 2144, LootType.Core, 12),
-            new Loot("Revovlers_Plant", 12703, 12718, LootType.Upgrade, 12),
+            new Loot("Revolvers_Plant", 12703, 12718, LootType.Upgrade, 12),
             new Loot("Flamethrower_Plant", 22204, 22222, LootType.Upgrade, 12),
             new Loot("Revolvers_Kit", 29498, 29511, LootType.Weapon, 12),
 
@@ -137,9 +137,9 @@ namespace BastionRandomiztion
 
             // Fortress01
             new Loot("Mortar_Kit", 4804, 4814, LootType.Weapon, 18),
-             new Loot("MusicBox_Item", 5553, 5566, LootType.Generic, 18),
-             new Loot("MonumentPiece_Upgrade", 40865, 40886, LootType.Core, 18),
-             new Loot("Revolvers_Plant", 381742, 381757, LootType.Upgrade, 18),
+            new Loot("MusicBox_Item", 5553, 5566, LootType.Generic, 18),
+            new Loot("MonumentPiece_Upgrade", 40865, 40886, LootType.Core, 18),
+            new Loot("Revolvers_Plant", 381742, 381757, LootType.Upgrade, 18),
 
             // Gauntlet01
             new Loot("MonumentPiece_Upgrade", 66566, 66587, LootType.Core, 19),
@@ -171,7 +171,7 @@ namespace BastionRandomiztion
             new Loot("Ram_Kit", 123675, 123682, LootType.Weapon, 25),
 
             // FinalZulf01
-            new Loot("Ram_Kit", 664, 671, LootType.Weapon, 26),
+            // new Loot("Ram_Kit", 664, 671, LootType.Weapon, 26),
             new Loot("MonumentPiece_Upgrade", 1560, 1581, LootType.Core, 26),
         };
         public List<MapData> Maps = new List<MapData>()

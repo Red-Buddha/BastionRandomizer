@@ -26,6 +26,7 @@ namespace BastionRandomiztion
         public bool upgrades;
         public bool cores;
         public bool guaranteeWeapon;
+        public bool randomizeHopscotch;
 
         GameData data = new GameData();
 
@@ -100,6 +101,9 @@ namespace BastionRandomiztion
         
         public void RandomizeLoot(Random rand, string path)
         {
+            if (!randomizeHopscotch)
+                data.loot.Remove(data.loot.Find(x => x.name == "Jump_Kit"));
+
             if(weapons)
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Weapon));
             if (abilities)
@@ -132,6 +136,18 @@ namespace BastionRandomiztion
             for (int i = 0; i < order.Length; ++i)
             {
                 Loot temp = tempLoot[order[i]];
+
+                // for now this sets hopscotch to be in its original location if it gets randomized to the ram_kit after it is required
+                if(data.randomizedLoot[i].name == "Ram_Kit" && temp.name == "Jump_Kit")
+                {
+                    data.randomizedLoot[i].name = data.randomizedLoot[i - 1].name;
+                    data.randomizedLoot[i].type = data.randomizedLoot[i - 1].type;
+
+                    data.randomizedLoot[i - 1].name = temp.name;
+                    data.randomizedLoot[i - 1].type = temp.type;
+
+                    continue;
+                }
 
                 data.randomizedLoot[i].name = temp.name;
                 data.randomizedLoot[i].type = temp.type;
