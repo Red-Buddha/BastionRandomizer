@@ -60,6 +60,8 @@ namespace BastionRandomiztion
         {
             randomizer.randomizeLoot = RandomizeLoot.Checked;
             LootOptions.Enabled = RandomizeLoot.Checked;
+            GuaranteeWeapon.Enabled = RandomizeLoot.Checked;
+            RandomizeHopscotch.Enabled = RandomizeLoot.Checked;
         }
 
         private void LootOptions_SelectedIndexChanged(object sender, EventArgs e)
@@ -85,6 +87,11 @@ namespace BastionRandomiztion
         private void GuaranteeWeapon_CheckedChanged(object sender, EventArgs e)
         {
             randomizer.guaranteeWeapon = GuaranteeWeapon.Checked;
+        }
+
+        private void RandomizeHopscotch_CheckedChanged(object sender, EventArgs e)
+        {
+            randomizer.randomizeHopscotch = RandomizeHopscotch.Checked;
         }
 
         // Cutscenes

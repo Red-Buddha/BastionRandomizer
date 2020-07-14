@@ -41,6 +41,7 @@
             this.RemoveHub = new System.Windows.Forms.CheckBox();
             this.LootOptions = new System.Windows.Forms.CheckedListBox();
             this.GuaranteeWeapon = new System.Windows.Forms.CheckBox();
+            this.RandomizeHopscotch = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // RandomizeLevelOrder
@@ -58,7 +59,7 @@
             // 
             // Randomize
             // 
-            this.Randomize.Location = new System.Drawing.Point(12, 149);
+            this.Randomize.Location = new System.Drawing.Point(15, 167);
             this.Randomize.Name = "Randomize";
             this.Randomize.Size = new System.Drawing.Size(91, 23);
             this.Randomize.TabIndex = 1;
@@ -81,7 +82,7 @@
             // 
             // Unrandomize
             // 
-            this.Unrandomize.Location = new System.Drawing.Point(116, 149);
+            this.Unrandomize.Location = new System.Drawing.Point(119, 167);
             this.Unrandomize.Name = "Unrandomize";
             this.Unrandomize.Size = new System.Drawing.Size(91, 23);
             this.Unrandomize.TabIndex = 3;
@@ -91,7 +92,7 @@
             // 
             // FolderSelect
             // 
-            this.FolderSelect.Location = new System.Drawing.Point(12, 178);
+            this.FolderSelect.Location = new System.Drawing.Point(15, 196);
             this.FolderSelect.Name = "FolderSelect";
             this.FolderSelect.Size = new System.Drawing.Size(91, 23);
             this.FolderSelect.TabIndex = 4;
@@ -101,7 +102,7 @@
             // 
             // PathTextBox
             // 
-            this.PathTextBox.Location = new System.Drawing.Point(116, 178);
+            this.PathTextBox.Location = new System.Drawing.Point(119, 196);
             this.PathTextBox.Multiline = false;
             this.PathTextBox.Name = "PathTextBox";
             this.PathTextBox.Size = new System.Drawing.Size(190, 23);
@@ -161,7 +162,7 @@
             "Abilities",
             "Upgrades",
             "Loot"});
-            this.LootOptions.Location = new System.Drawing.Point(189, 58);
+            this.LootOptions.Location = new System.Drawing.Point(189, 81);
             this.LootOptions.Name = "LootOptions";
             this.LootOptions.Size = new System.Drawing.Size(70, 60);
             this.LootOptions.TabIndex = 12;
@@ -170,7 +171,7 @@
             // GuaranteeWeapon
             // 
             this.GuaranteeWeapon.AutoSize = true;
-            this.GuaranteeWeapon.Location = new System.Drawing.Point(189, 36);
+            this.GuaranteeWeapon.Location = new System.Drawing.Point(189, 35);
             this.GuaranteeWeapon.Name = "GuaranteeWeapon";
             this.GuaranteeWeapon.Size = new System.Drawing.Size(120, 17);
             this.GuaranteeWeapon.TabIndex = 13;
@@ -178,11 +179,23 @@
             this.GuaranteeWeapon.UseVisualStyleBackColor = true;
             this.GuaranteeWeapon.CheckedChanged += new System.EventHandler(this.GuaranteeWeapon_CheckedChanged);
             // 
+            // RandomizeHopscotch
+            // 
+            this.RandomizeHopscotch.AutoSize = true;
+            this.RandomizeHopscotch.Location = new System.Drawing.Point(189, 58);
+            this.RandomizeHopscotch.Name = "RandomizeHopscotch";
+            this.RandomizeHopscotch.Size = new System.Drawing.Size(134, 17);
+            this.RandomizeHopscotch.TabIndex = 14;
+            this.RandomizeHopscotch.Text = "Randomize Hopscotch";
+            this.RandomizeHopscotch.UseVisualStyleBackColor = true;
+            this.RandomizeHopscotch.CheckedChanged += new System.EventHandler(this.RandomizeHopscotch_CheckedChanged);
+            // 
             // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 213);
+            this.ClientSize = new System.Drawing.Size(334, 231);
+            this.Controls.Add(this.RandomizeHopscotch);
             this.Controls.Add(this.GuaranteeWeapon);
             this.Controls.Add(this.LootOptions);
             this.Controls.Add(this.RemoveHub);
@@ -218,6 +231,7 @@
         private System.Windows.Forms.CheckBox RemoveHub;
         private System.Windows.Forms.CheckedListBox LootOptions;
         private System.Windows.Forms.CheckBox GuaranteeWeapon;
+        private System.Windows.Forms.CheckBox RandomizeHopscotch;
     }
 }
 
