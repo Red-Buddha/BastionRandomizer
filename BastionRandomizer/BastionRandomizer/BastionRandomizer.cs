@@ -16,7 +16,6 @@ namespace BastionRandomiztion
     public partial class BastionRandomizer : Form
     {
         int seed;
-        Random rand;
         Randomizer randomizer;
         string folderPath;
 
@@ -45,6 +44,7 @@ namespace BastionRandomiztion
             
             randomizer.randomizeLevels = RandomizeLevelOrder.Checked;
             randomizer.randomizeLoot = RandomizeLoot.Checked;
+            randomizer.randomizeEnemies = RandomizeEnemies.Checked;
             randomizer.noCutscenes = RemoveCutscenes.Checked;
             randomizer.noHub = RemoveHub.Checked;
         }
@@ -94,6 +94,12 @@ namespace BastionRandomiztion
             randomizer.randomizeHopscotch = RandomizeHopscotch.Checked;
         }
 
+        // Enemies
+        private void RandomizeEnemies_CheckedChanged(object sender, EventArgs e)
+        {
+            randomizer.randomizeEnemies = RandomizeEnemies.Checked;
+        }
+
         // Cutscenes
         private void RemoveCutscenes_CheckedChanged(object sender, EventArgs e)
         {
@@ -128,17 +134,20 @@ namespace BastionRandomiztion
                 return;
 
             if (SeedTextBox.Text == "")
-                rand = new Random();
+                randomizer.rand = new Random();
             else
-                rand = new Random(seed);
+                randomizer.rand = new Random(seed);
 
             randomizer.BackupFiles(folderPath);
 
             if (randomizer.randomizeLevels)
-                randomizer.RandomizeLevelOrder(rand, folderPath);
+                randomizer.RandomizeLevelOrder(folderPath);
 
             if (randomizer.randomizeLoot)
-                randomizer.RandomizeLoot(rand, folderPath);
+                randomizer.RandomizeLoot();
+
+            if (randomizer.randomizeEnemies)
+                randomizer.SetEnemyPackages(folderPath);
 
             randomizer.EditLevelScripts(folderPath);
         }
@@ -164,5 +173,6 @@ namespace BastionRandomiztion
         {
             folderPath = PathTextBox.Text;
         }
+
     }
 }

@@ -42,6 +42,7 @@
             this.LootOptions = new System.Windows.Forms.CheckedListBox();
             this.GuaranteeWeapon = new System.Windows.Forms.CheckBox();
             this.RandomizeHopscotch = new System.Windows.Forms.CheckBox();
+            this.RandomizeEnemies = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // RandomizeLevelOrder
@@ -190,11 +191,25 @@
             this.RandomizeHopscotch.UseVisualStyleBackColor = true;
             this.RandomizeHopscotch.CheckedChanged += new System.EventHandler(this.RandomizeHopscotch_CheckedChanged);
             // 
+            // RandomizeEnemies
+            // 
+            this.RandomizeEnemies.AutoSize = true;
+            this.RandomizeEnemies.Checked = true;
+            this.RandomizeEnemies.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RandomizeEnemies.Location = new System.Drawing.Point(325, 12);
+            this.RandomizeEnemies.Name = "RandomizeEnemies";
+            this.RandomizeEnemies.Size = new System.Drawing.Size(122, 17);
+            this.RandomizeEnemies.TabIndex = 15;
+            this.RandomizeEnemies.Text = "Randomize Enemies";
+            this.RandomizeEnemies.UseVisualStyleBackColor = true;
+            this.RandomizeEnemies.CheckedChanged += new System.EventHandler(this.RandomizeEnemies_CheckedChanged);
+            // 
             // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 231);
+            this.ClientSize = new System.Drawing.Size(501, 231);
+            this.Controls.Add(this.RandomizeEnemies);
             this.Controls.Add(this.RandomizeHopscotch);
             this.Controls.Add(this.GuaranteeWeapon);
             this.Controls.Add(this.LootOptions);
@@ -232,6 +247,7 @@
         private System.Windows.Forms.CheckedListBox LootOptions;
         private System.Windows.Forms.CheckBox GuaranteeWeapon;
         private System.Windows.Forms.CheckBox RandomizeHopscotch;
+        private System.Windows.Forms.CheckBox RandomizeEnemies;
     }
 }
 

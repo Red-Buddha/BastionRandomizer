@@ -18,6 +18,7 @@ namespace BastionRandomiztion
 
         public bool randomizeLevels;
         public bool randomizeLoot;
+        public bool randomizeEnemies;
         public bool noCutscenes;
         public bool noHub;
         public bool weapons;
@@ -28,10 +29,12 @@ namespace BastionRandomiztion
         public bool guaranteeWeapon;
         public bool randomizeHopscotch;
 
+        public Random rand;
+
         GameData data = new GameData();
 
 
-        private int[] Shuffle(Random rand, int[] array)
+        private int[] Shuffle(int[] array)
         {
             int[] randomOrder = new int[array.Length];
             array.CopyTo(randomOrder, 0);
@@ -52,15 +55,14 @@ namespace BastionRandomiztion
         ///////////////////////////
         /// LEVEL RANDOMIZATION ///
         ///////////////////////////
-
-        // Randomize the order of all levels except for challenges, wharf district, the bastion
-        public void RandomizeLevelOrder(Random rand, string path)
+        
+        public void RandomizeLevelOrder(string path)
         {
             // create array all levels and for levels that will be randomized
             int[] newOrder = Enumerable.Range(0, 32).ToArray();
             int[] tempOrder = new int[17] { 2, 4, 5, 8, 9, 10, 14, 15, 16, 17, 18, 21, 23, 25, 27, 28, 29 };
 
-            randomLevelOrder = Shuffle(rand, tempOrder);
+            randomLevelOrder = Shuffle(tempOrder);
 
             for (int j = 0; j < tempOrder.Count(); ++j)
             {
@@ -96,10 +98,10 @@ namespace BastionRandomiztion
         }
 
         ////////////////////////////
-        /// ITEM RANDOMIZATION ///
+        ///  ITEM RANDOMIZATION  ///
         ////////////////////////////
         
-        public void RandomizeLoot(Random rand, string path)
+        public void RandomizeLoot()
         {
             if (!randomizeHopscotch)
                 data.loot.Remove(data.loot.Find(x => x.name == "Jump_Kit"));
@@ -117,12 +119,12 @@ namespace BastionRandomiztion
 
             int[] newOrder = Enumerable.Range(0, data.randomizedLoot.Count).ToArray();
                         
-            newOrder = Shuffle(rand, newOrder);
+            newOrder = Shuffle(newOrder);
 
-            SetLootValues(newOrder, path);
+            SetLootValues(newOrder);
         }
 
-        private void SetLootValues(int[] order, string path)
+        private void SetLootValues(int[] order)
         {
             //FileStream file = new FileStream("test.txt", FileMode.Create);
             //StreamWriter stream = new StreamWriter(file);
@@ -181,9 +183,134 @@ namespace BastionRandomiztion
             //file.Close();
         }
 
+        /////////////////////////////
+        ///  ENEMY RANDOMIZATION  ///
+        /////////////////////////////
+
+        public void SetEnemyPackages(string path)
+        {
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path + "/Content/Game/Units/Mudgatororiginal.xml");
+
+                XmlNodeList NPCs = doc.GetElementsByTagName("Npc");
+                XmlAttribute package = doc.CreateAttribute("CustomPackage");
+                package.InnerXml = "Hunt01";
+                NPCs[0].Attributes.Append(package);
+
+                doc.Save(path + "/Content/Game/Units/Mudgator.xml");
+            }
+
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path + "/Content/Game/Units/Turretoriginal.xml");
+
+                XmlNodeList NPCs = doc.GetElementsByTagName("Npc");
+                XmlAttribute package = doc.CreateAttribute("CustomPackage");
+                package.InnerXml = "Falling01";
+                NPCs[0].Attributes.Append(package);
+                XmlAttribute package2 = doc.CreateAttribute("CustomPackage");
+                package2.InnerXml = "Rescue01";
+                NPCs[2].Attributes.Append(package2);
+                XmlAttribute package3 = doc.CreateAttribute("CustomPackage");
+                package3.InnerXml = "ProtoIntro01b";
+                NPCs[3].Attributes.Append(package3);
+                XmlAttribute package4 = doc.CreateAttribute("CustomPackage");
+                package4.InnerXml = "ProtoIntro01b";
+                NPCs[6].Attributes.Append(package4);
+
+                doc.Save(path + "/Content/Game/Units/Turret.xml");
+            }
+
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path + "/Content/Game/Units/Turtleoriginal.xml");
+
+                XmlNodeList NPCs = doc.GetElementsByTagName("Npc");
+                XmlAttribute package = doc.CreateAttribute("CustomPackage");
+                package.InnerXml = "Gauntlet01";
+                NPCs[0].Attributes.Append(package);
+
+                doc.Save(path + "/Content/Game/Units/Turtle.xml");
+            }
+
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path + "/Content/Game/Units/Stinkweedoriginal.xml");
+
+                XmlNodeList NPCs = doc.GetElementsByTagName("Npc");
+                XmlAttribute package = doc.CreateAttribute("CustomPackage");
+                package.InnerXml = "Fortress01";
+                NPCs[0].Attributes.Append(package);
+
+                doc.Save(path + "/Content/Game/Units/Stinkweed.xml");
+            }
+
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path + "/Content/Game/Units/Spineweedoriginal.xml");
+
+                XmlNodeList NPCs = doc.GetElementsByTagName("Npc");
+                XmlAttribute package = doc.CreateAttribute("CustomPackage");
+                package.InnerXml = "Gauntlet01";
+                NPCs[0].Attributes.Append(package);
+
+                doc.Save(path + "/Content/Game/Units/Spineweed.xml");
+            }
+
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(path + "/Content/Game/Units/Lassooriginal.xml");
+
+                XmlNodeList NPCs = doc.GetElementsByTagName("Npc");
+                XmlAttribute package = doc.CreateAttribute("CustomPackage");
+                package.InnerXml = "Gauntlet01";
+                NPCs[0].Attributes.Append(package);
+
+                doc.Save(path + "/Content/Game/Units/Lasso.xml");
+            }
+
+            RandomizeEnemies();
+        }
+
+        public void RandomizeEnemies()
+        {
+            int[] newOrder = Enumerable.Range(0, data.enemies.Count).ToArray();
+
+            newOrder = Shuffle(newOrder);
+
+            SetEnemyValues(newOrder);
+        }
+
+        public void SetEnemyValues(int[] order)
+        {
+            List<Enemy> tempEnemies = new List<Enemy>(data.enemies.Count);
+            foreach (Enemy enemy in data.enemies)
+            {
+                tempEnemies.Add(new Enemy(enemy));
+            }
+
+            for (int i = 0; i < order.Length; ++i)
+            {
+                data.enemies[i].name = tempEnemies[order[i]].name;
+            }
+
+            FileStream file = new FileStream("test.txt", FileMode.Create);
+            StreamWriter stream = new StreamWriter(file);
+
+            for (int j = 0; j < data.enemies.Count; ++j)
+            {
+                stream.WriteLine(data.enemies[j].name + " " + data.enemies[j].levelIndex);
+            }
+
+            stream.Close();
+            file.Close();
+        }
+
         ///////////////////////
         /// FILE MANAGEMENT ///
         ///////////////////////
+
         public void ReadScript(string path, MapData map)
         {
             using (FileStream fileStream = new FileStream(path + "\\Content\\Maps\\" + map.levelName + ".original.map", FileMode.Open))
@@ -201,6 +328,24 @@ namespace BastionRandomiztion
                 dataBlock2Length = (int)fileStream.Length - map.scriptEnd;
                 mapDataBlock2 = new byte[(int)fileStream.Length - map.scriptEnd];
                 reader.Read(mapDataBlock2, 0, (int)fileStream.Length - map.scriptEnd);
+
+                //if(map.levelName == "Shrine01")
+                //{
+                //    string name = "LightMeleeScared";
+
+                //    List<int> locations = new List<int>();
+                //    for(int i = 0; i < mapDataBlock2.Length; ++i)
+                //    {
+                //        if (mapDataBlock2[i] == name[0])
+                //            if (mapDataBlock2[i + 1] == name[1])
+                //                if (mapDataBlock2[i + 2] == name[2])
+                //                    if (mapDataBlock2[i + 3] == name[3])
+                //                        if(mapDataBlock2[i - 1] == name.Length)
+                //                            locations.Add(i - 1);
+                //    }
+
+                //    int trew = 3546345;
+                //}
 
                 reader.Close();
             }
@@ -231,9 +376,29 @@ namespace BastionRandomiztion
                 File.Copy(folderPath + "/Content/Game/MapLayouts.xml", folderPath + "/Content/Game/MapLayouts.original.xml");
             }
 
-            if (File.Exists(folderPath + "/Content/Game/Loot/WeaponKits.original.xml") == false)
+            if (File.Exists(folderPath + "/Content/Game/Units/Mudgatororiginal.xml") == false)
             {
-                File.Copy(folderPath + "/Content/Game/Loot/WeaponKits.xml", folderPath + "/Content/Game/Loot/WeaponKits.original.xml");
+                File.Copy(folderPath + "/Content/Game/Units/Mudgator.xml", folderPath + "/Content/Game/Units/Mudgatororiginal.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Turretoriginal.xml") == false)
+            {
+                File.Copy(folderPath + "/Content/Game/Units/Turret.xml", folderPath + "/Content/Game/Units/Turretoriginal.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Turtleoriginal.xml") == false)
+            {
+                File.Copy(folderPath + "/Content/Game/Units/Turtle.xml", folderPath + "/Content/Game/Units/Turtleoriginal.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Stinkweedoriginal.xml") == false)
+            {
+                File.Copy(folderPath + "/Content/Game/Units/Stinkweed.xml", folderPath + "/Content/Game/Units/Stinkweedoriginal.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Spineweedoriginal.xml") == false)
+            {
+                File.Copy(folderPath + "/Content/Game/Units/Spineweed.xml", folderPath + "/Content/Game/Units/Spineweedoriginal.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Lassooriginal.xml") == false)
+            {
+                File.Copy(folderPath + "/Content/Game/Units/Lasso.xml", folderPath + "/Content/Game/Units/Lassooriginal.xml");
             }
 
             DirectoryInfo dir = new DirectoryInfo(folderPath + "/Content/Maps/");
@@ -258,10 +423,35 @@ namespace BastionRandomiztion
                 File.Move(folderPath + "/Content/Game/MapLayouts.original.xml", folderPath + "/Content/Game/MapLayouts.xml");
             }
 
-            if (File.Exists(folderPath + "/Content/Game/Loot/WeaponKits.original.xml"))
+            if (File.Exists(folderPath + "/Content/Game/Units/Mudgatororiginal.xml"))
             {
-                File.Delete(folderPath + "/Content/Game/Loot/WeaponKits.xml");
-                File.Move(folderPath + "/Content/Game/Loot/WeaponKits.original.xml", folderPath + "/Content/Game/Loot/WeaponKits.xml");
+                File.Delete(folderPath + "/Content/Game/Units/Mudgator.xml");
+                File.Move(folderPath + "/Content/Game/Units/Mudgatororiginal.xml", folderPath + "/Content/Game/Units/Mudgator.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Turretoriginal.xml"))
+            {
+                File.Delete(folderPath + "/Content/Game/Units/Turret.xml");
+                File.Move(folderPath + "/Content/Game/Units/Turretoriginal.xml", folderPath + "/Content/Game/Units/Turret.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Turtleoriginal.xml"))
+            {
+                File.Delete(folderPath + "/Content/Game/Units/Turtle.xml");
+                File.Move(folderPath + "/Content/Game/Units/Turtleoriginal.xml", folderPath + "/Content/Game/Units/Turtle.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Stinkweedoriginal.xml"))
+            {
+                File.Delete(folderPath + "/Content/Game/Units/Stinkweed.xml");
+                File.Move(folderPath + "/Content/Game/Units/Stinkweedoriginal.xml", folderPath + "/Content/Game/Units/Stinkweed.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Spineweedoriginal.xml"))
+            {
+                File.Delete(folderPath + "/Content/Game/Units/Spineweed.xml");
+                File.Move(folderPath + "/Content/Game/Units/Spineweedoriginal.xml", folderPath + "/Content/Game/Units/Spineweed.xml");
+            }
+            if (File.Exists(folderPath + "/Content/Game/Units/Lassooriginal.xml"))
+            {
+                File.Delete(folderPath + "/Content/Game/Units/Lasso.xml");
+                File.Move(folderPath + "/Content/Game/Units/Lassooriginal.xml", folderPath + "/Content/Game/Units/Lasso.xml");
             }
 
             DirectoryInfo dir = new DirectoryInfo(folderPath + "/Content/Maps/");
@@ -283,38 +473,42 @@ namespace BastionRandomiztion
         public void EditLevelScripts(string path)
         {
             // Rippling Walls
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[0]);
-                SetLevelLoot(0);
+                SetLevelData(0);
                 WriteScript(path, data.Maps[0]);
             }
 
             // Sole Regret
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[1]);
-                SetLevelLoot(1);
+                SetLevelData(1);
+                if(randomizeEnemies)
+                {
+                    SoleModifyFightTriggers();
+                }
                 WriteScript(path, data.Maps[1]);
             }
 
             // Wharf District
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[2]);
                 if (noHub)
                 {
                     WharfSkipHub();
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(2);
+                    SetLevelData(2);
                 }
                 WriteScript(path, data.Maps[2]);
             }
 
             // Bastion
-            if (randomizeLevels || noCutscenes || randomizeLoot)
+            if (randomizeLevels || noCutscenes || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[3]);
                 if (randomizeLevels)
@@ -326,30 +520,30 @@ namespace BastionRandomiztion
                 {
                     RemoveBastionCutscenes();
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(3);
+                    SetLevelData(3);
                 }
                 WriteScript(path, data.Maps[3]);
             }
 
             // Workmen Ward
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[4]);
                 if (noHub)
                 {
                     WorkmenSkipHub(2);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(4);
+                    SetLevelData(4);
                 }
                 WriteScript(path, data.Maps[4]);
             }
 
             // Sundown Path
-            if (noCutscenes || noHub || randomizeLoot)
+            if (noCutscenes || noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[5]);
                 if (noCutscenes)
@@ -360,75 +554,75 @@ namespace BastionRandomiztion
                 {
                     SundownSkipHub(5);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(5);
+                    SetLevelData(5);
                 }
                 WriteScript(path, data.Maps[5]);
             }
 
             // Melting Pot
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[6]);
                 if (noHub)
                 {
                     MeltingSkipHub(4);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(6);
+                    SetLevelData(6);
                 }
                 WriteScript(path, data.Maps[6]);
             }
 
             // Hanging Gardens
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[7]);
                 if (noHub)
                 {
                     GardensSkipHub(8);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(7);
+                    SetLevelData(7);
                 }
                 WriteScript(path, data.Maps[7]);
             }
 
             // Cinderbrick Fort
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[8]);
                 if (noHub)
                 {
                     CinderbrickSkipHub(9);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(8);
+                    SetLevelData(8);
                 }
                 WriteScript(path, data.Maps[8]);
             }
 
             // Pyth Orchard
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[9]);
                 if (noHub)
                 {
                     PythSkipHub(10);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(9);
+                    SetLevelData(9);
                 }
                 WriteScript(path, data.Maps[9]);
             }
 
             // Langston
-            if (randomizeLevels || noHub || randomizeLoot)
+            if (randomizeLevels || noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[10]);
                 if (randomizeLevels)
@@ -439,140 +633,140 @@ namespace BastionRandomiztion
                 {
                     LangstonSkipHub(14);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(10);
+                    SetLevelData(10);
                 }
                 WriteScript(path, data.Maps[10]);
             }
 
             // Prosper Bluff
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[11]);
                 if (noHub)
                 {
                     ProsperSkipHub(15);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(11);
+                    SetLevelData(11);
                 }
                 WriteScript(path, data.Maps[11]);
             }
 
             // Wild Outskirts
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[12]);
                 if (noHub)
                 {
                     OutskirtsSkipHub(16);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(12);
+                    SetLevelData(12);
                 }
                 WriteScript(path, data.Maps[12]);
             }
 
             // Jawson Bog
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[13]);
                 if (noHub)
                 {
                     JawsonSkipHub(17);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(13);
+                    SetLevelData(13);
                 }
                 WriteScript(path, data.Maps[13]);
             }
 
             // Jawson Dream
-            if (randomizeLevels || noCutscenes || randomizeLoot)
+            if (randomizeLevels || noCutscenes || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[14]);
                 if(randomizeLevels)
                 {
-                    RemoveDreamMonument();
+                    //RemoveDreamMonument();
                 }
                 if (noCutscenes)
                 {
                     RemoveDreamCutscene();
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(14);
+                    SetLevelData(14);
                 }
                 
                 WriteScript(path, data.Maps[14]);
             }
 
             // Roathus Lagoon
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[15]);
                 if (noHub)
                 {
                     RoathusSkipHub(18);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(15);
+                    SetLevelData(15);
                 }
                 WriteScript(path, data.Maps[15]);
             }
 
             // Point Lemaign
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[16]);
                 if (noHub)
                 {
                     LemaignSkipHub(21);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(16);
+                    SetLevelData(16);
                 }
                 WriteScript(path, data.Maps[16]);
             }
 
             // Colford Cauldron
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[17]);
                 if (noHub)
                 {
                     ColfordSkipHub(23);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(17);
+                    SetLevelData(17);
                 }
                 WriteScript(path, data.Maps[17]);
             }
 
             // Mount Zand
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[18]);
                 if (noHub)
                 {
                     ZandSkipHub(25);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(18);
+                    SetLevelData(18);
                 }
                 WriteScript(path, data.Maps[18]);
             }
 
             // Burstone Quarry
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[19]);
                 if (noHub)
@@ -580,108 +774,126 @@ namespace BastionRandomiztion
                     // Invasion skip makes skipping hub not possible so its removed from the mode for now
                     BurstoneSkipHub(27);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(19);
+                    SetLevelData(19);
                 }
                 WriteScript(path, data.Maps[19]);
             }
 
             // Ura Invasion
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[20]);
-                SetLevelLoot(20);
+                SetLevelData(20);
                 WriteScript(path, data.Maps[20]);
             }
 
             // Urzendra Gate
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[21]);
                 if (noHub)
                 {
                     UrzendraSkipHub(28);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(21);
+                    SetLevelData(21);
                 }
                 WriteScript(path, data.Maps[21]);
             }
 
             // Zulten's Hollow
-            if (noHub || randomizeLoot)
+            if (noHub || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[22]);
                 if (noHub)
                 {
                     ZultenSkipHub(29);
                 }
-                if (randomizeLoot)
+                if (randomizeLoot || randomizeEnemies)
                 {
-                    SetLevelLoot(22);
+                    SetLevelData(22);
                 }
                 WriteScript(path, data.Maps[22]);
             }
 
             // Tazal 1
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[23]);
-                SetLevelLoot(23);
+                SetLevelData(23);
                 WriteScript(path, data.Maps[23]);
             }
 
             // Tazal 2
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[24]);
-                SetLevelLoot(24);
+                SetLevelData(24);
                 WriteScript(path, data.Maps[24]);
             }
 
             // Tazal 3
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[25]);
-                SetLevelLoot(25);
+                SetLevelData(25);
                 WriteScript(path, data.Maps[25]);
             }
 
             // Tazal 4
-            if (randomizeLoot)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[26]);
-                SetLevelLoot(26);
+                SetLevelData(26);
                 WriteScript(path, data.Maps[26]);
             }
         }
 
         #region Level Functions
-
-        private void SetLevelLoot(int index)
+        
+        private void SetLevelData(int index)
         {
             List<Loot> levelLoot = data.randomizedLoot.FindAll(x => x.levelIndex == index);
-            levelLoot.Sort((x, y) => y.start.CompareTo(x.start));
+            List<Enemy> levelEnemies = data.enemies.FindAll(x => x.levelIndex == index);
 
+            // add current level enemies and loot into the same list
+            List<Tuple<string, int, int>> objects = new List<Tuple<string, int, int>>();
+            if(randomizeLoot)
+                objects.AddRange(levelLoot.Select(x => Tuple.Create(x.name, x.start, x.length)));
+            if(randomizeEnemies)
+                objects.AddRange(levelEnemies.Select(x => Tuple.Create(x.name, x.start, x.length)));
+
+            // sort the list in reverse order
+            objects.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+            
             List<byte> tempdata = mapDataBlock2.ToList();
 
-            for (int i = 0; i < levelLoot.Count; ++i)
+            for (int i = 0; i < objects.Count; ++i)
             {
-                int range = levelLoot[i].end - levelLoot[i].start + 1;
-                tempdata.RemoveRange(levelLoot[i].start, range);
-
-                // adding the length of the string to the front
+                tempdata.RemoveRange(objects[i].Item2, objects[i].Item3 + 1);
+                
                 List<byte> lootName = new List<byte>();
-                lootName.Add((byte)levelLoot[i].name.Length);
-                lootName.AddRange(Encoding.UTF8.GetBytes(levelLoot[i].name));
+                lootName.Add((byte)objects[i].Item1.Length);
+                lootName.AddRange(Encoding.UTF8.GetBytes(objects[i].Item1));
 
-                tempdata.InsertRange(levelLoot[i].start, lootName);
+                tempdata.InsertRange(objects[i].Item2, lootName);
             }
 
             mapDataBlock2 = tempdata.ToArray();
         }
+
+        #region Sole Regret
+        private void SoleModifyFightTriggers()
+        {
+            // find a way to progress fight beyond checking for box spawns at line ~130 and ~270 and ~300
+            // trigger at fight in wharf district needs looked at
+            // crash in wild outskirts
+            // crash in gauntlet
+        }
+        #endregion
 
         #region Wharf District
         private void WharfSkipHub()
