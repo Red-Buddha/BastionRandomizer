@@ -19,8 +19,6 @@ namespace BastionRandomiztion
         public bool randomizeLevels;
         public bool randomizeLoot;
         public bool randomizeEnemies;
-        public bool noCutscenes;
-        public bool noHub;
         public bool weapons;
         public bool abilities;
         public bool loot;
@@ -55,7 +53,7 @@ namespace BastionRandomiztion
         ///////////////////////////
         /// LEVEL RANDOMIZATION ///
         ///////////////////////////
-        
+
         public void RandomizeLevelOrder(string path)
         {
             // create array all levels and for levels that will be randomized
@@ -100,13 +98,13 @@ namespace BastionRandomiztion
         ////////////////////////////
         ///  ITEM RANDOMIZATION  ///
         ////////////////////////////
-        
+
         public void RandomizeLoot()
         {
             if (!randomizeHopscotch)
                 data.loot.Remove(data.loot.Find(x => x.name == "Jump_Kit"));
 
-            if(weapons)
+            if (weapons)
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Weapon));
             if (abilities)
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Ability));
@@ -118,7 +116,7 @@ namespace BastionRandomiztion
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Core));
 
             int[] newOrder = Enumerable.Range(0, data.randomizedLoot.Count).ToArray();
-                        
+
             newOrder = Shuffle(newOrder);
 
             SetLootValues(newOrder);
@@ -126,9 +124,6 @@ namespace BastionRandomiztion
 
         private void SetLootValues(int[] order)
         {
-            //FileStream file = new FileStream("test.txt", FileMode.Create);
-            //StreamWriter stream = new StreamWriter(file);
-
             List<Loot> tempLoot = new List<Loot>(data.randomizedLoot.Count);
             foreach (Loot loot in data.randomizedLoot)
             {
@@ -140,7 +135,7 @@ namespace BastionRandomiztion
                 Loot temp = tempLoot[order[i]];
 
                 // for now this sets hopscotch to be in its original location if it gets randomized to the ram_kit after it is required
-                if(data.randomizedLoot[i].name == "Ram_Kit" && temp.name == "Jump_Kit")
+                if (data.randomizedLoot[i].name == "Ram_Kit" && temp.name == "Jump_Kit")
                 {
                     data.randomizedLoot[i].name = data.randomizedLoot[i - 1].name;
                     data.randomizedLoot[i].type = data.randomizedLoot[i - 1].type;
@@ -155,11 +150,12 @@ namespace BastionRandomiztion
                 data.randomizedLoot[i].type = temp.type;
             }
 
-            if(guaranteeWeapon && data.randomizedLoot[0].type != LootType.Weapon)
+            // need to be sure that weapons are randomized for this
+            if (guaranteeWeapon && data.randomizedLoot[0].type != LootType.Weapon)
             {
-                for(int i = 0; i < data.randomizedLoot.Count; ++i)
+                for (int i = 0; i < data.randomizedLoot.Count; ++i)
                 {
-                    if(data.randomizedLoot[i].type == LootType.Weapon)
+                    if (data.randomizedLoot[i].type == LootType.Weapon)
                     {
                         Loot temp = new Loot(data.randomizedLoot[i]);
 
@@ -173,14 +169,6 @@ namespace BastionRandomiztion
                     }
                 }
             }
-
-            //for(int j = 0; j < data.randomizedLoot.Count; ++j)
-            //{
-            //    stream.WriteLine(data.randomizedLoot[j].name + " " + data.randomizedLoot[j].levelIndex);
-            //}
-
-            //stream.Close();
-            //file.Close();
         }
 
         /////////////////////////////
@@ -329,24 +317,6 @@ namespace BastionRandomiztion
                 mapDataBlock2 = new byte[(int)fileStream.Length - map.scriptEnd];
                 reader.Read(mapDataBlock2, 0, (int)fileStream.Length - map.scriptEnd);
 
-                //if(map.levelName == "Shrine01")
-                //{
-                //    string name = "LightMeleeScared";
-
-                //    List<int> locations = new List<int>();
-                //    for(int i = 0; i < mapDataBlock2.Length; ++i)
-                //    {
-                //        if (mapDataBlock2[i] == name[0])
-                //            if (mapDataBlock2[i + 1] == name[1])
-                //                if (mapDataBlock2[i + 2] == name[2])
-                //                    if (mapDataBlock2[i + 3] == name[3])
-                //                        if(mapDataBlock2[i - 1] == name.Length)
-                //                            locations.Add(i - 1);
-                //    }
-
-                //    int trew = 3546345;
-                //}
-
                 reader.Close();
             }
         }
@@ -485,7 +455,7 @@ namespace BastionRandomiztion
             {
                 ReadScript(path, data.Maps[1]);
                 SetLevelData(1);
-                if(randomizeEnemies)
+                if (randomizeEnemies)
                 {
                     SoleModifyFightTriggers();
                 }
@@ -493,32 +463,28 @@ namespace BastionRandomiztion
             }
 
             // Wharf District
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[2]);
-                if (noHub)
-                {
-                    WharfSkipHub();
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(2);
+                }
+                if (randomizeEnemies)
+                {
+                    WharfModifyFightTriggers();
                 }
                 WriteScript(path, data.Maps[2]);
             }
 
             // Bastion
-            if (randomizeLevels || noCutscenes || randomizeLoot || randomizeEnemies)
+            if (randomizeLevels || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[3]);
                 if (randomizeLevels)
                 {
                     SetLevelOrder();
                     UnlockBastion();
-                }
-                if (noCutscenes)
-                {
-                    RemoveBastionCutscenes();
                 }
                 if (randomizeLoot || randomizeEnemies)
                 {
@@ -528,13 +494,9 @@ namespace BastionRandomiztion
             }
 
             // Workmen Ward
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[4]);
-                if (noHub)
-                {
-                    WorkmenSkipHub(2);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(4);
@@ -543,17 +505,9 @@ namespace BastionRandomiztion
             }
 
             // Sundown Path
-            if (noCutscenes || noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[5]);
-                if (noCutscenes)
-                {
-                    RemoveSundownCutscene();
-                }
-                if (noHub)
-                {
-                    SundownSkipHub(5);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(5);
@@ -562,28 +516,24 @@ namespace BastionRandomiztion
             }
 
             // Melting Pot
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[6]);
-                if (noHub)
-                {
-                    MeltingSkipHub(4);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(6);
+                }
+                if (randomizeEnemies)
+                {
+                    MeltingModifyFightTriggers();
                 }
                 WriteScript(path, data.Maps[6]);
             }
 
             // Hanging Gardens
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[7]);
-                if (noHub)
-                {
-                    GardensSkipHub(8);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(7);
@@ -592,28 +542,24 @@ namespace BastionRandomiztion
             }
 
             // Cinderbrick Fort
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[8]);
-                if (noHub)
-                {
-                    CinderbrickSkipHub(9);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(8);
+                }
+                if (randomizeEnemies)
+                {
+                    CinderbrickModifyFightTriggers();
                 }
                 WriteScript(path, data.Maps[8]);
             }
 
             // Pyth Orchard
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[9]);
-                if (noHub)
-                {
-                    PythSkipHub(10);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(9);
@@ -622,16 +568,12 @@ namespace BastionRandomiztion
             }
 
             // Langston
-            if (randomizeLevels || noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLevels || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[10]);
                 if (randomizeLevels)
                 {
                     UncoupleLangston();
-                }
-                if (noHub)
-                {
-                    LangstonSkipHub(14);
                 }
                 if (randomizeLoot || randomizeEnemies)
                 {
@@ -641,13 +583,9 @@ namespace BastionRandomiztion
             }
 
             // Prosper Bluff
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[11]);
-                if (noHub)
-                {
-                    ProsperSkipHub(15);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(11);
@@ -656,13 +594,9 @@ namespace BastionRandomiztion
             }
 
             // Wild Outskirts
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[12]);
-                if (noHub)
-                {
-                    OutskirtsSkipHub(16);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(12);
@@ -671,13 +605,9 @@ namespace BastionRandomiztion
             }
 
             // Jawson Bog
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[13]);
-                if (noHub)
-                {
-                    JawsonSkipHub(17);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(13);
@@ -686,33 +616,25 @@ namespace BastionRandomiztion
             }
 
             // Jawson Dream
-            if (randomizeLevels || noCutscenes || randomizeLoot || randomizeEnemies)
+            if (randomizeLevels || randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[14]);
-                if(randomizeLevels)
+                if (randomizeLevels)
                 {
                     //RemoveDreamMonument();
-                }
-                if (noCutscenes)
-                {
-                    RemoveDreamCutscene();
                 }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(14);
                 }
-                
+
                 WriteScript(path, data.Maps[14]);
             }
 
             // Roathus Lagoon
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[15]);
-                if (noHub)
-                {
-                    RoathusSkipHub(18);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(15);
@@ -721,13 +643,9 @@ namespace BastionRandomiztion
             }
 
             // Point Lemaign
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[16]);
-                if (noHub)
-                {
-                    LemaignSkipHub(21);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(16);
@@ -736,13 +654,9 @@ namespace BastionRandomiztion
             }
 
             // Colford Cauldron
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[17]);
-                if (noHub)
-                {
-                    ColfordSkipHub(23);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(17);
@@ -751,13 +665,9 @@ namespace BastionRandomiztion
             }
 
             // Mount Zand
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[18]);
-                if (noHub)
-                {
-                    ZandSkipHub(25);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(18);
@@ -766,14 +676,9 @@ namespace BastionRandomiztion
             }
 
             // Burstone Quarry
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[19]);
-                if (noHub)
-                {
-                    // Invasion skip makes skipping hub not possible so its removed from the mode for now
-                    BurstoneSkipHub(27);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(19);
@@ -790,13 +695,9 @@ namespace BastionRandomiztion
             }
 
             // Urzendra Gate
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[21]);
-                if (noHub)
-                {
-                    UrzendraSkipHub(28);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(21);
@@ -805,13 +706,9 @@ namespace BastionRandomiztion
             }
 
             // Zulten's Hollow
-            if (noHub || randomizeLoot || randomizeEnemies)
+            if (randomizeLoot || randomizeEnemies)
             {
                 ReadScript(path, data.Maps[22]);
-                if (noHub)
-                {
-                    ZultenSkipHub(29);
-                }
                 if (randomizeLoot || randomizeEnemies)
                 {
                     SetLevelData(22);
@@ -853,7 +750,7 @@ namespace BastionRandomiztion
         }
 
         #region Level Functions
-        
+
         private void SetLevelData(int index)
         {
             List<Loot> levelLoot = data.randomizedLoot.FindAll(x => x.levelIndex == index);
@@ -861,20 +758,20 @@ namespace BastionRandomiztion
 
             // add current level enemies and loot into the same list
             List<Tuple<string, int, int>> objects = new List<Tuple<string, int, int>>();
-            if(randomizeLoot)
+            if (randomizeLoot)
                 objects.AddRange(levelLoot.Select(x => Tuple.Create(x.name, x.start, x.length)));
-            if(randomizeEnemies)
+            if (randomizeEnemies)
                 objects.AddRange(levelEnemies.Select(x => Tuple.Create(x.name, x.start, x.length)));
 
             // sort the list in reverse order
             objects.Sort((x, y) => y.Item2.CompareTo(x.Item2));
-            
+
             List<byte> tempdata = mapDataBlock2.ToList();
 
             for (int i = 0; i < objects.Count; ++i)
             {
                 tempdata.RemoveRange(objects[i].Item2, objects[i].Item3 + 1);
-                
+
                 List<byte> lootName = new List<byte>();
                 lootName.Add((byte)objects[i].Item1.Length);
                 lootName.AddRange(Encoding.UTF8.GetBytes(objects[i].Item1));
@@ -888,18 +785,41 @@ namespace BastionRandomiztion
         #region Sole Regret
         private void SoleModifyFightTriggers()
         {
-            // find a way to progress fight beyond checking for box spawns at line ~130 and ~270 and ~300
-            // trigger at fight in wharf district needs looked at
-            // crash in wild outskirts
-            // crash in gauntlet
+            scripts[215] = "OnSpawn 6964 IncrementCounter NumBoxSpawnsWave01a 1 ; RequiredFlag = CommenceWave01a \n";
+            scripts[219] = "OnSpawn 6963 IncrementCounter NumBoxSpawnsWave01a 1 ; RequiredFlag = CommenceWave01a \n";
+            scripts[223] = "OnSpawn 6965 IncrementCounter NumBoxSpawnsWave01a 1 ; RequiredFlag = CommenceWave01a \n";
+            scripts[230] = "";
+            scripts[249] = "OnDestroy 6967 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[252] = "OnDestroy 6968 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[255] = "OnDestroy 6969 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[258] = "OnDestroy 6970 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[261] = "OnDestroy 6974 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[264] = "OnDestroy 6973 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[267] = "OnDestroy 6972 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[270] = "OnDestroy 6971 IncrementCounter NumDeadWave01b 1 ; RequiredFlag = CommenceWave01b\n";
+            scripts[272] = "";
+            scripts[273] = "";
+            scripts[302] = "OnDestroyAny Wave02 IncrementCounter NumLightMeleeDead 1 ; FireCount = 50\n";
+            scripts[303] = "OnDestroy 7217 IncrementCounter NumLightMeleeDead 1 ; FireCount = 50\n";
         }
         #endregion
 
         #region Wharf District
-        private void WharfSkipHub()
+        private void WharfModifyFightTriggers()
         {
-            scripts[18] = "OnFlagTrue HeFell LoadMap " + data.levelInfos[randomLevelOrder[0]].name + " ; DelaySeconds = 1.25\r\n";
-            scripts[965] = "OnUsed 964 LoadMap " + data.levelInfos[randomLevelOrder[0]].name + "\r\n";
+            scripts[488] = "OnDestroy 7754 IncrementCounter NumMachinesBusted 1 ; RequiredFlag = BossEmerge\n";
+            scripts[489] = "OnDestroy 8331 IncrementCounter NumMachinesBusted 1 ; RequiredFlag = BossEmerge\n";
+
+            scripts[509] = "OnDestroy 7847 IncrementCounter NumScumbagsDead 1 ; \n";
+            scripts[510] = "OnDestroy 7890 IncrementCounter NumScumbagsDead 1 ; \n";
+
+            scripts[513] = "OnDestroy 7847 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
+            scripts[514] = "OnDestroy 7890 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
+            scripts[515] = "OnDestroy 2884 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
+            scripts[516] = "OnDestroy 7754 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
+            scripts[517] = "OnDestroy 8331 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
+            scripts[518] = "OnDestroy 7877 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
+            scripts[519] = "OnDestroy 7878 IncrementCounter NumBossEnemiesDead 1 ; RequiredFlag = BossEmerge ; \n";
         }
         #endregion
 
@@ -927,155 +847,46 @@ namespace BastionRandomiztion
 
             scripts[3544 + randomLevelOrder.Length - 1] = "OnLoad SetFlagTrue MAPS_UNLOCKED FinalArena01 ; RequiredFlag = FlagGlobalComplete" + data.levelInfos[randomLevelOrder[randomLevelOrder.Length - 1]].name + " ; SaveStatus = true\r\n";
         }
-
-        private void RemoveBastionCutscenes()
-        {
-            scripts[50] = "\r\n";
-            scripts[51] = "\r\n";
-            scripts[52] = "\r\n";
-            scripts[53] = "\r\n";
-            scripts[54] = "\r\n";
-        }
         #endregion
 
         #region Workmen Ward
-        private void WorkmenSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[591] = "OnUsed 9066 LoadMap " + levelname + "\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Sundown Path
-        private void RemoveSundownCutscene()
-        {
-            scripts[605] = "OnFlagTrue SetupEndingPan LoadMap ProtoTown03 ; DelaySeconds = 1.5\r\n";
-        }
-
-        private void SundownSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    if (noCutscenes)
-                        scripts[605] = "OnFlagTrue SetupEndingPan LoadMap " + levelname + " ; DelaySeconds = 1.5\r\n";
-                    else
-                        scripts[619] = "OnFlagTrue CommenceEndingPan LoadMap " + levelname + " ; DelaySeconds = 13.5\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Melting Pot
-        private void MeltingSkipHub(int index)
+        private void MeltingModifyFightTriggers()
         {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[587] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.5\r\n";
-
-                    return;
-                }
-            }
+            scripts[365] = "OnDestroyAny WaveBoxFellas IncrementCounter NumDeadWave01 1; FireForever = true; RequiredFlag = CommenceWave01; RequiredFalseFlag = CommenceWave02\r\n";
+            scripts[366] = "OnDestroyAny WaveBox IncrementCounter NumDeadWave03 1 ; FireForever = true ; RequiredFlag = CommenceWave03 ; RequiredFalseFlag = CommenceWave04\r\n";
         }
         #endregion
 
         #region Hanging Gardens
-        private void GardensSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[513] = "OnFlagTrue SmashCut LoadMap " + levelname + " ; DelaySeconds = 0.5\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Cinderbrick Fort
-        private void CinderbrickSkipHub(int index)
+        private void CinderbrickModifyFightTriggers()
         {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
+            // Audio only fight triggers
+            // 211 212 281-288 350 362-367 
 
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
+            scripts[443] = "OnDestroy 15655 IncrementCounter NumGiantsDown 1 ; FireCount = 2\r\n";
+            scripts[444] = "OnDestroy 15656 IncrementCounter NumGiantsDown 1 ; FireCount = 2\r\n";
+                        
+            // need to find ids of the normal enemies
+            scripts[739] = "OnDestroy 24173 IncrementCounter OpenArenaBocca 1 ; FireCount = 4 ; RequiredFlag = ArenaEncounterStarted ;\r\n";
+            scripts[740] = "OnDestroy 24175 IncrementCounter OpenArenaBocca 1 ; FireCount = 4 ; RequiredFlag = ArenaEncounterStarted ;\r\n";
+            scripts[741] = "OnDestroy 24172 IncrementCounter OpenArenaBocca 1 ; FireCount = 4 ; RequiredFlag = ArenaEncounterStarted ;\r\n";
+            scripts[742] = "OnDestroy 15655 IncrementCounter OpenArenaBocca 1 ; FireCount = 4 ; RequiredFlag = ArenaEncounterStarted ;\r\n";
+            scripts[743] = "OnDestroy 15656 IncrementCounter OpenArenaBocca 1 ; FireCount = 4 ; RequiredFlag = ArenaEncounterStarted ;\r\n";
 
-                    scripts[821] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
-
-                    return;
-                }
-            }
+            scripts[744] = "OnCounter OpenArenaBocca >= 5 SetFlagTrue ArenaEncounterFinished\r\n";
         }
         #endregion
 
         #region Pyth Orchard
-        private void PythSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[421] = "OnUsed VarSkyway LoadMap " + levelname + "\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Langston
@@ -1083,92 +894,15 @@ namespace BastionRandomiztion
         {
             scripts[1213] = "\tLoadMap ProtoTown03 ; DelaySeconds = 2.0 ;\r\n";
         }
-
-        private void LangstonSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[1213] = "\tLoadMap " + levelname + " ; DelaySeconds = 2.0 ;\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Prosper Bluff
-        private void ProsperSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[510] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.35 ;\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Wild Outskirts
-        private void OutskirtsSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[854] = "\tLoadMap " + levelname + " ; DelaySeconds = 10.5\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Jawson Bog
-        private void JawsonSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[487] = "\tLoadMap " + levelname + " ; DelaySeconds = 7.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
         
         #region Jawson Dream
@@ -1188,169 +922,30 @@ namespace BastionRandomiztion
 
             mapDataBlock2 = tempdata.ToArray();
         }
-
-        private void RemoveDreamCutscene()
-        {
-            scripts[765] = "\tLoadMap Scenes02 ; DelaySeconds = 3.1\r\n";
-            scripts[766] = "\tSetGlobalFlagTrue FlagGlobalCompleteScenes01 ;";
-        }
         #endregion
 
         #region Roathus Lagoon
-        private void RoathusSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[959] = "\tLoadMap " + levelname + " ; DelaySeconds = 3.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Point Lemaign
-        private void LemaignSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[711] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Colford Cauldron
-        private void ColfordSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[552] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.5\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Mount Zand
-        private void ZandSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[489] = "\tLoadMap " + levelname + " ; DelaySeconds = 5.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Burstone Quarry
-        private void BurstoneSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[770] = "\tLoadMap " + levelname + " ; DelaySeconds = 4.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Ura Invasion
         #endregion
 
         #region Urzendra Gate
-        private void UrzendraSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[974] = "\tLoadMap " + levelname + " ; DelaySeconds = 7.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Zulten's Hollow
-        private void ZultenSkipHub(int index)
-        {
-            for (int i = 0; i < randomLevelOrder.Length; ++i)
-            {
-                if (randomLevelOrder[i] == index)
-                {
-                    string levelname;
-
-                    if (i == randomLevelOrder.Length - 1)
-                        levelname = "FinalArena01";
-                    else
-                        levelname = data.levelInfos[randomLevelOrder[i + 1]].name;
-
-                    scripts[941] = "\tLoadMap " + levelname + " ; DelaySeconds = 9.0\r\n";
-
-                    return;
-                }
-            }
-        }
         #endregion
 
         #region Tazal

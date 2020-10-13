@@ -45,8 +45,6 @@ namespace BastionRandomiztion
             randomizer.randomizeLevels = RandomizeLevelOrder.Checked;
             randomizer.randomizeLoot = RandomizeLoot.Checked;
             randomizer.randomizeEnemies = RandomizeEnemies.Checked;
-            randomizer.noCutscenes = RemoveCutscenes.Checked;
-            randomizer.noHub = RemoveHub.Checked;
         }
 
         // Levels
@@ -98,18 +96,6 @@ namespace BastionRandomiztion
         private void RandomizeEnemies_CheckedChanged(object sender, EventArgs e)
         {
             randomizer.randomizeEnemies = RandomizeEnemies.Checked;
-        }
-
-        // Cutscenes
-        private void RemoveCutscenes_CheckedChanged(object sender, EventArgs e)
-        {
-            randomizer.noCutscenes = RemoveCutscenes.Checked;
-        }
-
-        // No Hub
-        private void RemoveHub_CheckedChanged(object sender, EventArgs e)
-        {
-            randomizer.noHub = RemoveHub.Checked;
         }
 
         // Set Seed
