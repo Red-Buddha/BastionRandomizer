@@ -37,11 +37,10 @@
             this.PathTextBox = new System.Windows.Forms.RichTextBox();
             this.SeedTextBox = new System.Windows.Forms.TextBox();
             this.SeedLabel = new System.Windows.Forms.Label();
-            this.RemoveCutscenes = new System.Windows.Forms.CheckBox();
-            this.RemoveHub = new System.Windows.Forms.CheckBox();
             this.LootOptions = new System.Windows.Forms.CheckedListBox();
             this.GuaranteeWeapon = new System.Windows.Forms.CheckBox();
             this.RandomizeHopscotch = new System.Windows.Forms.CheckBox();
+            this.RandomizeEnemies = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // RandomizeLevelOrder
@@ -74,9 +73,9 @@
             this.RandomizeLoot.CheckState = System.Windows.Forms.CheckState.Checked;
             this.RandomizeLoot.Location = new System.Drawing.Point(170, 12);
             this.RandomizeLoot.Name = "RandomizeLoot";
-            this.RandomizeLoot.Size = new System.Drawing.Size(103, 17);
+            this.RandomizeLoot.Size = new System.Drawing.Size(107, 17);
             this.RandomizeLoot.TabIndex = 2;
-            this.RandomizeLoot.Text = "Randomize Loot";
+            this.RandomizeLoot.Text = "Randomize Items";
             this.RandomizeLoot.UseVisualStyleBackColor = true;
             this.RandomizeLoot.CheckedChanged += new System.EventHandler(this.RandomizeLoot_CheckedChanged);
             // 
@@ -112,7 +111,7 @@
             // 
             // SeedTextBox
             // 
-            this.SeedTextBox.Location = new System.Drawing.Point(47, 113);
+            this.SeedTextBox.Location = new System.Drawing.Point(41, 58);
             this.SeedTextBox.MaxLength = 9;
             this.SeedTextBox.Name = "SeedTextBox";
             this.SeedTextBox.Size = new System.Drawing.Size(93, 20);
@@ -123,33 +122,11 @@
             // SeedLabel
             // 
             this.SeedLabel.AutoSize = true;
-            this.SeedLabel.Location = new System.Drawing.Point(9, 116);
+            this.SeedLabel.Location = new System.Drawing.Point(3, 61);
             this.SeedLabel.Name = "SeedLabel";
             this.SeedLabel.Size = new System.Drawing.Size(32, 13);
             this.SeedLabel.TabIndex = 9;
             this.SeedLabel.Text = "Seed";
-            // 
-            // RemoveCutscenes
-            // 
-            this.RemoveCutscenes.AutoSize = true;
-            this.RemoveCutscenes.Location = new System.Drawing.Point(12, 58);
-            this.RemoveCutscenes.Name = "RemoveCutscenes";
-            this.RemoveCutscenes.Size = new System.Drawing.Size(119, 17);
-            this.RemoveCutscenes.TabIndex = 10;
-            this.RemoveCutscenes.Text = "Remove Cutscenes";
-            this.RemoveCutscenes.UseVisualStyleBackColor = true;
-            this.RemoveCutscenes.CheckedChanged += new System.EventHandler(this.RemoveCutscenes_CheckedChanged);
-            // 
-            // RemoveHub
-            // 
-            this.RemoveHub.AutoSize = true;
-            this.RemoveHub.Location = new System.Drawing.Point(12, 81);
-            this.RemoveHub.Name = "RemoveHub";
-            this.RemoveHub.Size = new System.Drawing.Size(118, 17);
-            this.RemoveHub.TabIndex = 11;
-            this.RemoveHub.Text = "Remove Hub Level";
-            this.RemoveHub.UseVisualStyleBackColor = true;
-            this.RemoveHub.CheckedChanged += new System.EventHandler(this.RemoveHub_CheckedChanged);
             // 
             // LootOptions
             // 
@@ -162,7 +139,7 @@
             "Abilities",
             "Upgrades",
             "Loot"});
-            this.LootOptions.Location = new System.Drawing.Point(189, 81);
+            this.LootOptions.Location = new System.Drawing.Point(175, 83);
             this.LootOptions.Name = "LootOptions";
             this.LootOptions.Size = new System.Drawing.Size(70, 60);
             this.LootOptions.TabIndex = 12;
@@ -171,7 +148,7 @@
             // GuaranteeWeapon
             // 
             this.GuaranteeWeapon.AutoSize = true;
-            this.GuaranteeWeapon.Location = new System.Drawing.Point(189, 35);
+            this.GuaranteeWeapon.Location = new System.Drawing.Point(175, 37);
             this.GuaranteeWeapon.Name = "GuaranteeWeapon";
             this.GuaranteeWeapon.Size = new System.Drawing.Size(120, 17);
             this.GuaranteeWeapon.TabIndex = 13;
@@ -182,7 +159,7 @@
             // RandomizeHopscotch
             // 
             this.RandomizeHopscotch.AutoSize = true;
-            this.RandomizeHopscotch.Location = new System.Drawing.Point(189, 58);
+            this.RandomizeHopscotch.Location = new System.Drawing.Point(175, 60);
             this.RandomizeHopscotch.Name = "RandomizeHopscotch";
             this.RandomizeHopscotch.Size = new System.Drawing.Size(134, 17);
             this.RandomizeHopscotch.TabIndex = 14;
@@ -190,16 +167,28 @@
             this.RandomizeHopscotch.UseVisualStyleBackColor = true;
             this.RandomizeHopscotch.CheckedChanged += new System.EventHandler(this.RandomizeHopscotch_CheckedChanged);
             // 
+            // RandomizeEnemies
+            // 
+            this.RandomizeEnemies.AutoSize = true;
+            this.RandomizeEnemies.Checked = true;
+            this.RandomizeEnemies.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.RandomizeEnemies.Location = new System.Drawing.Point(12, 35);
+            this.RandomizeEnemies.Name = "RandomizeEnemies";
+            this.RandomizeEnemies.Size = new System.Drawing.Size(122, 17);
+            this.RandomizeEnemies.TabIndex = 15;
+            this.RandomizeEnemies.Text = "Randomize Enemies";
+            this.RandomizeEnemies.UseVisualStyleBackColor = true;
+            this.RandomizeEnemies.CheckedChanged += new System.EventHandler(this.RandomizeEnemies_CheckedChanged);
+            // 
             // BastionRandomizer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 231);
+            this.ClientSize = new System.Drawing.Size(326, 231);
+            this.Controls.Add(this.RandomizeEnemies);
             this.Controls.Add(this.RandomizeHopscotch);
             this.Controls.Add(this.GuaranteeWeapon);
             this.Controls.Add(this.LootOptions);
-            this.Controls.Add(this.RemoveHub);
-            this.Controls.Add(this.RemoveCutscenes);
             this.Controls.Add(this.SeedLabel);
             this.Controls.Add(this.SeedTextBox);
             this.Controls.Add(this.PathTextBox);
@@ -227,11 +216,10 @@
         private System.Windows.Forms.RichTextBox PathTextBox;
         private System.Windows.Forms.TextBox SeedTextBox;
         private System.Windows.Forms.Label SeedLabel;
-        private System.Windows.Forms.CheckBox RemoveCutscenes;
-        private System.Windows.Forms.CheckBox RemoveHub;
         private System.Windows.Forms.CheckedListBox LootOptions;
         private System.Windows.Forms.CheckBox GuaranteeWeapon;
         private System.Windows.Forms.CheckBox RandomizeHopscotch;
+        private System.Windows.Forms.CheckBox RandomizeEnemies;
     }
 }
 
