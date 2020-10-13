@@ -151,7 +151,7 @@ namespace BastionRandomiztion
             }
 
             // need to be sure that weapons are randomized for this
-            if (guaranteeWeapon && data.randomizedLoot[0].type != LootType.Weapon)
+            if (guaranteeWeapon && data.randomizedLoot.Count > 0 && data.randomizedLoot[0].type != LootType.Weapon)
             {
                 for (int i = 0; i < data.randomizedLoot.Count; ++i)
                 {
