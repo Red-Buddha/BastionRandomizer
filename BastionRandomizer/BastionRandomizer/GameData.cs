@@ -212,7 +212,7 @@ namespace BastionRandomiztion
         public GameData()
         {
             // need to determine level id somehow
-            string[] files = Directory.GetFiles("../../Bastion Enemy Locations");
+            string[] files = Directory.GetFiles("Bastion Enemy Locations");
             for (int i = 0; i < files.Length; ++i)
             {
                 StreamReader reader = new StreamReader(files[i]);
