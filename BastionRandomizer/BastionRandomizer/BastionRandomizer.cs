@@ -116,7 +116,7 @@ namespace BastionRandomiztion
         // Randomize
         private void Randomize_Click(object sender, EventArgs e)
         {
-            if (randomizer.randomizeLevels == false && randomizer.randomizeLoot == false)
+            if (randomizer.randomizeLevels == false && randomizer.randomizeLoot == false && randomizer.randomizeEnemies == false)
                 return;
 
             if (SeedTextBox.Text == "")
