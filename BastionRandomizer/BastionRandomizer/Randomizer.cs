@@ -101,8 +101,7 @@ namespace BastionRandomiztion
 
         public void RandomizeLoot()
         {
-            if (!randomizeHopscotch)
-                data.loot.Remove(data.loot.Find(x => x.name == "Jump_Kit"));
+            data.randomizedLoot.Clear();
 
             if (weapons)
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Weapon));
@@ -114,6 +113,9 @@ namespace BastionRandomiztion
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Generic));
             if (cores)
                 data.randomizedLoot.AddRange(data.loot.FindAll(x => x.type == LootType.Core));
+
+            if (!randomizeHopscotch)
+                data.randomizedLoot.Remove(data.randomizedLoot.Find(x => x.name == "Jump_Kit"));
 
             int[] newOrder = Enumerable.Range(0, data.randomizedLoot.Count).ToArray();
 
@@ -273,22 +275,25 @@ namespace BastionRandomiztion
         public void SetEnemyValues(int[] order)
         {
             List<Enemy> tempEnemies = new List<Enemy>(data.enemies.Count);
+            data.newEnemies.Clear();
+
             foreach (Enemy enemy in data.enemies)
             {
                 tempEnemies.Add(new Enemy(enemy));
+                data.newEnemies.Add(new Enemy(enemy));
             }
 
             for (int i = 0; i < order.Length; ++i)
             {
-                data.enemies[i].name = tempEnemies[order[i]].name;
+                data.newEnemies[i].name = tempEnemies[order[i]].name;
             }
 
             FileStream file = new FileStream("test.txt", FileMode.Create);
             StreamWriter stream = new StreamWriter(file);
 
-            for (int j = 0; j < data.enemies.Count; ++j)
+            for (int j = 0; j < data.newEnemies.Count; ++j)
             {
-                stream.WriteLine(data.enemies[j].name + " " + data.enemies[j].levelIndex);
+                stream.WriteLine(data.newEnemies[j].name + " " + data.newEnemies[j].levelIndex);
             }
 
             stream.Close();
@@ -754,7 +759,7 @@ namespace BastionRandomiztion
         private void SetLevelData(int index)
         {
             List<Loot> levelLoot = data.randomizedLoot.FindAll(x => x.levelIndex == index);
-            List<Enemy> levelEnemies = data.enemies.FindAll(x => x.levelIndex == index);
+            List<Enemy> levelEnemies = data.newEnemies.FindAll(x => x.levelIndex == index);
 
             // add current level enemies and loot into the same list
             List<Tuple<string, int, int>> objects = new List<Tuple<string, int, int>>();

@@ -44,6 +44,7 @@ namespace BastionRandomiztion
             new LevelInfo("Challenge12", "GUI\\Shell\\level_icons\\map_challenge12", "ProtoTown03_119", "Challenge12_Completed", 99),
             new LevelInfo("FinalArena01", "GUI\\Shell\\level_icons\\map_finalArena01", "ProtoTown03_101", "", 99)
         };
+
         public List<Loot> loot = new List<Loot>()
         {
             // ProtoIntro01
@@ -175,7 +176,11 @@ namespace BastionRandomiztion
             // new Loot("Ram_Kit", 664, 671, LootType.Weapon, 26),
             new Loot("MonumentPiece_Upgrade", 1560, 21, LootType.Core, 26),
         };
+        public List<Loot> randomizedLoot = new List<Loot>();
+
         public List<Enemy> enemies = new List<Enemy>();
+        public List<Enemy> newEnemies = new List<Enemy>();
+
         public List<MapData> Maps = new List<MapData>()
         {
             new MapData("ProtoIntro01", 162680, 184473), // done
@@ -207,7 +212,6 @@ namespace BastionRandomiztion
             new MapData("FinalZulf01", 235804, 277706) // done
         };
 
-        public List<Loot> randomizedLoot = new List<Loot>();
 
         public GameData()
         {
