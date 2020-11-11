@@ -5,13 +5,11 @@ This is a Randomizer for Supergiant Games' Bastion.
 
 * Randomize Level Order
   * Randomizes the order of the levels (Wharf District is still the first level and Tazal Terminals is still the last level)  
+* Randomize Enemies
+  * Randomizes the spawn for each enemy in the game
 * Randomize Loot 
   * `Guarantee Weapon` A weapon will always be placed at the hammer location 
   * `Weapons, Abilities, Upgrades, Loot` Adds the specified item pools to the randomized loot pool
-* Remove Cutscence
-  * Removes the cutscenes from the Bastion , Sundown Path, and Jawson Dream
-* Remove Hub Level
-  * Beating a level immediately sends you to the next level skipping returning to the hub until after Tazal Terminals
 * Seed
   * Used for creating a specific randomized version of the game, leave blank for a random seed
   
